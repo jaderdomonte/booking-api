@@ -6,20 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "GUEST")
+@Table(name = "BOOKING_STATUS")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Guest {
+public class BookingStatusEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private GuestName fullName;
+    private String description;
 
-    public Guest(GuestName fullName){
-        this.fullName = fullName;
+    public BookingStatusEntity(String description){
+        this.description = description;
     }
 }

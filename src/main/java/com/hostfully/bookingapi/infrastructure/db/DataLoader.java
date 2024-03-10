@@ -1,9 +1,9 @@
 package com.hostfully.bookingapi.infrastructure.db;
 
-import com.hostfully.bookingapi.infrastructure.db.entity.Guest;
+import com.hostfully.bookingapi.infrastructure.db.entity.BookingStatusEntity;
+import com.hostfully.bookingapi.infrastructure.db.entity.GuestEntity;
 import com.hostfully.bookingapi.infrastructure.db.entity.GuestName;
 import com.hostfully.bookingapi.infrastructure.db.entity.PropertyEntity;
-import com.hostfully.bookingapi.infrastructure.db.repository.BookingStatus;
 import com.hostfully.bookingapi.infrastructure.db.repository.BookingStatusRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.GuestRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.PropertyRepository;
@@ -18,11 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
-    private PropertyRepository propertyRepository;
+    private final PropertyRepository propertyRepository;
 
-    private GuestRepository guestRepository;
+    private final GuestRepository guestRepository;
 
-    private BookingStatusRepository bookingStatusRepository;
+    private final BookingStatusRepository bookingStatusRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -32,24 +32,24 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createBookingStatus() {
-        BookingStatus confirmed = new BookingStatus("CONFIRMED");
-        BookingStatus canceled = new BookingStatus("CANCELED");
+        BookingStatusEntity confirmed = new BookingStatusEntity("CONFIRMED");
+        BookingStatusEntity canceled = new BookingStatusEntity("CANCELED");
 
-        List<BookingStatus> bookingStatus = Arrays.asList(confirmed, canceled);
+        List<BookingStatusEntity> bookingStatusEntities = Arrays.asList(confirmed, canceled);
 
-        bookingStatus.forEach(status -> bookingStatusRepository.save(status));
+        bookingStatusEntities.forEach(status -> bookingStatusRepository.save(status));
     }
 
     private void createGuests() {
-        Guest aaronRodgers = new Guest(new GuestName("Aaron", "Rodgers"));
-        Guest brockPurdy = new Guest(new GuestName("Brock", "Purdy"));
-        Guest patrickMahomes = new Guest(new GuestName("Patrick", "Mahomes"));
-        Guest jordanLove = new Guest(new GuestName("Jordan", "Love"));
-        Guest ericStokes = new Guest(new GuestName("Eric", "Stokes"));
+        GuestEntity aaronRodgers = new GuestEntity(new GuestName("Aaron", "Rodgers"));
+        GuestEntity brockPurdy = new GuestEntity(new GuestName("Brock", "Purdy"));
+        GuestEntity patrickMahomes = new GuestEntity(new GuestName("Patrick", "Mahomes"));
+        GuestEntity jordanLove = new GuestEntity(new GuestName("Jordan", "Love"));
+        GuestEntity ericStokes = new GuestEntity(new GuestName("Eric", "Stokes"));
 
-        List<Guest> guests = Arrays.asList(aaronRodgers, brockPurdy, patrickMahomes, jordanLove, ericStokes);
+        List<GuestEntity> guestEntities = Arrays.asList(aaronRodgers, brockPurdy, patrickMahomes, jordanLove, ericStokes);
 
-        guests.forEach(guest -> guestRepository.save(guest));
+        guestEntities.forEach(guestEntity -> guestRepository.save(guestEntity));
     }
 
     private void createProperties() {

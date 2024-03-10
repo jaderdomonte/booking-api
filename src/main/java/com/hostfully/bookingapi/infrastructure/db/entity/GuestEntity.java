@@ -1,26 +1,25 @@
 package com.hostfully.bookingapi.infrastructure.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "PROPERTY")
+@Table(name = "GUEST")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class PropertyEntity {
+public class GuestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Embedded
+    private GuestName fullName;
 
-    public PropertyEntity(String name){
-        this.name = name;
+    public GuestEntity(GuestName fullName){
+        this.fullName = fullName;
     }
 }
