@@ -39,6 +39,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context:6.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:6.1.4" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.12" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:6.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:3.2.3" level="project" />
@@ -84,7 +85,7 @@
     <orderEntry type="library" name="Maven: org.webjars:swagger-ui:4.17.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:webjars-locator-core:0.55" level="project" />
     <orderEntry type="library" name="Maven: io.github.classgraph:classgraph:4.8.149" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.10.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:3.2.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:3.2.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:3.2.3" level="project" />

@@ -1,6 +1,7 @@
 package com.hostfully.bookingapi.infrastructure.db.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class BookingEntity {
 
     @Id
@@ -19,14 +21,19 @@ public class BookingEntity {
     @ManyToOne
     private GuestEntity guest;
 
+    @ManyToOne
+    private PropertyEntity property;
+
     @Embedded
     private BookingPeriod period;
 
     @ManyToOne
     private BookingStatusEntity status;
 
-    public BookingEntity(GuestEntity guest, BookingPeriod period) {
+    public BookingEntity(GuestEntity guest, PropertyEntity property, BookingPeriod period, BookingStatusEntity status) {
         this.guest = guest;
+        this.property = property;
         this.period = period;
+        this.status = status;
     }
 }

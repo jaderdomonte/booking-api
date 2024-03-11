@@ -8,7 +8,7 @@ import com.hostfully.bookingapi.infrastructure.db.entity.PropertyEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BlockingEntityMapper {
+public class BlockingEntityDomainMapper {
 
     public Blocking toDomain(BlockingEntity entity){
         BookingPeriod bookingPeriod = new BookingPeriod(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Blocking {
+public class Blocking extends ValidatedDomain {
 
     private Long id;
 
@@ -18,22 +18,21 @@ public class Blocking {
     public Blocking(Long id, Property property, BookingPeriod period) {
         this(property, period);
         this.id = id;
-        validate();
+        validatePropertyAndPeriod();
     }
 
     public Blocking(Property property, BookingPeriod period) {
         this.property = property;
         this.period = period;
-        validate();
+        validatePropertyAndPeriod();
     }
 
-    private void validate(){
-        if(property == null){
-            throw new DomainObjectValidationException("Property is required.");
-        }
+    public Blocking(BookingPeriod period) {
+        this.property = property;
+    }
 
-        if(period == null){
-            throw new DomainObjectValidationException("Period is required.");
-        }
+    private void validatePropertyAndPeriod(){
+        validateField(property == null, "Property is required.");
+        validateField(period == null, "Period is required.");
     }
 }

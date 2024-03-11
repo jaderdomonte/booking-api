@@ -6,6 +6,7 @@ import com.hostfully.bookingapi.infrastructure.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
+import com.hostfully.bookingapi.web.request.BlockingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BlockingResponse;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,12 @@ public class BlockingDtoDomainMapper {
     }
 
     public Blocking fromRequestToDomain(BlockingCreateRequest request){
-        Property property = new Property(request.propertyId(), null);
+        Property property = new Property(request.propertyId());
         BookingPeriod bookingPeriod = new BookingPeriod(request.checkIn(), request.checkOut());
         return new Blocking(property, bookingPeriod);
+    }
+
+    public BookingPeriodDto fromRequestToDomain(BlockingUpdateRequest request){
+        return new BookingPeriodDto(request.checkIn(), request.checkOut());
     }
 }

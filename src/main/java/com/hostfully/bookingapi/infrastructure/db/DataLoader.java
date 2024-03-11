@@ -1,9 +1,8 @@
 package com.hostfully.bookingapi.infrastructure.db;
 
-import com.hostfully.bookingapi.infrastructure.db.entity.BookingStatusEntity;
-import com.hostfully.bookingapi.infrastructure.db.entity.GuestEntity;
-import com.hostfully.bookingapi.infrastructure.db.entity.GuestName;
-import com.hostfully.bookingapi.infrastructure.db.entity.PropertyEntity;
+import com.hostfully.bookingapi.infrastructure.db.entity.*;
+import com.hostfully.bookingapi.infrastructure.db.enumeration.BookingStatusEnum;
+import com.hostfully.bookingapi.infrastructure.db.repository.BookingRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.BookingStatusRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.GuestRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.PropertyRepository;
@@ -11,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,20 +24,20 @@ public class DataLoader implements CommandLineRunner {
 
     private final BookingStatusRepository bookingStatusRepository;
 
+    private final BookingRepository bookingRepository;
+
     @Override
     public void run(String... args) throws Exception {
         createProperties();
         createGuests();
         createBookingStatus();
+        createBookings();
     }
 
     private void createBookingStatus() {
-        BookingStatusEntity confirmed = new BookingStatusEntity("CONFIRMED");
-        BookingStatusEntity canceled = new BookingStatusEntity("CANCELED");
-
-        List<BookingStatusEntity> bookingStatusEntities = Arrays.asList(confirmed, canceled);
-
-        bookingStatusEntities.forEach(status -> bookingStatusRepository.save(status));
+        Arrays.stream(BookingStatusEnum.values())
+                .forEach(statusEnum ->
+                        bookingStatusRepository.save(new BookingStatusEntity(statusEnum.getId(), statusEnum.getDescription())));
     }
 
     private void createGuests() {
@@ -64,5 +64,20 @@ public class DataLoader implements CommandLineRunner {
         propertyEntities.forEach(propertyEntity -> propertyRepository.save(propertyEntity));
 
         System.out.println(propertyRepository.findAll().size());
+    }
+
+    private void createBookings() {
+        GuestEntity guest = new GuestEntity(1L);
+        BookingPeriod bookingPeriod = new BookingPeriod(LocalDate.now(), LocalDate.now().plusDays(10));
+        BookingStatusEntity bookingStatusEntity = new BookingStatusEntity(BookingStatusEnum.CONFIRMED.getId());
+        PropertyEntity propertyEntity = new PropertyEntity(1L, "Lakefront Escape");
+
+        bookingRepository.save(new BookingEntity(guest, propertyEntity, bookingPeriod, bookingStatusEntity));
+
+        GuestEntity guest2 = new GuestEntity(2L);
+        BookingPeriod bookingPeriod2 = new BookingPeriod(LocalDate.now(), LocalDate.now().plusDays(10));
+        PropertyEntity propertyEntity2 = new PropertyEntity(2L, "Beachside Home");
+
+        bookingRepository.save(new BookingEntity(guest2, propertyEntity2, bookingPeriod2, bookingStatusEntity));
     }
 }

@@ -1,11 +1,10 @@
 package com.hostfully.bookingapi.domain;
 
-import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 @Getter
-public class BookingStatusVO {
+public class BookingStatusVO extends ValidatedDomain {
 
     private Long id;
 
@@ -13,7 +12,7 @@ public class BookingStatusVO {
 
     public BookingStatusVO(String description){
         this.description = description;
-        validate();
+        validateDescription();
     }
 
     public BookingStatusVO(Long id, String description) {
@@ -21,9 +20,7 @@ public class BookingStatusVO {
         this.description = description;
     }
 
-    private void validate(){
-        if(StringUtils.isEmpty(description)){
-            throw new DomainObjectValidationException("Status description is required.");
-        }
+    private void validateDescription(){
+        validateField(StringUtils.isEmpty(description), "Status description is required.");
     }
 }
