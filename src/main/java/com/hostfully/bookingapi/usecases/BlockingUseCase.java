@@ -10,6 +10,8 @@ import com.hostfully.bookingapi.infrastructure.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.infrastructure.db.repository.BookingRepository;
 import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -18,6 +20,8 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class BlockingUseCase {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BlockingUseCase.class);
 
     private final BlockingRepository blockingRepository;
 
@@ -58,20 +62,25 @@ public class BlockingUseCase {
     }
 
     private void checkOverlappingPeriod(LocalDate checkIn, LocalDate checkOut) {
-        int overlappingBookingCount = bookingRepository.checkOverlapping(checkIn, checkOut);
-        List<BookingEntity> bookingEntities = bookingRepository.checkOverlappingBookings(checkIn, checkOut);
-        System.out.println(bookingEntities.size());
+        checkOverllapingBooking(checkIn, checkOut);
+        checkOverllapingBlocking(checkIn, checkOut);
+    }
 
-        if (overlappingBookingCount > 0) {
-            throw new BookingOverlappingException("This Property is already booked in this period!");
-        }
-
+    private void checkOverllapingBlocking(LocalDate checkIn, LocalDate checkOut) {
         int overlappingBlockingsCount = blockingRepository.checkOverlapping(checkIn, checkOut);
         List<BlockingEntity> blockingEntities = blockingRepository.checkOverlappingBlockings(checkIn, checkOut);
-        System.out.println(blockingEntities.size());
 
         if (overlappingBlockingsCount > 0) {
             throw new BookingOverlappingException("This Property is already blocked in this period!");
+        }
+    }
+
+    private void checkOverllapingBooking(LocalDate checkIn, LocalDate checkOut) {
+        int overlappingBookingCount = bookingRepository.checkOverlapping(checkIn, checkOut);
+        List<BookingEntity> bookingEntities = bookingRepository.checkOverlappingBookings(checkIn, checkOut);
+
+        if (overlappingBookingCount > 0) {
+            throw new BookingOverlappingException("This Property is already booked in this period!");
         }
     }
 }
