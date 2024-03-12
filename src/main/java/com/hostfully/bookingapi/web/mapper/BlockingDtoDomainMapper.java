@@ -1,8 +1,8 @@
 package com.hostfully.bookingapi.web.mapper;
 
+import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.domain.Blocking;
 import com.hostfully.bookingapi.domain.Property;
-import com.hostfully.bookingapi.infrastructure.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
@@ -21,7 +21,7 @@ public class BlockingDtoDomainMapper {
 
     public Blocking fromRequestToDomain(BlockingCreateRequest request){
         Property property = new Property(request.propertyId());
-        BookingPeriod bookingPeriod = new BookingPeriod(request.checkIn(), request.checkOut());
+        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(request.checkIn()).checkOut(request.checkOut()).build();
         return new Blocking(property, bookingPeriod);
     }
 

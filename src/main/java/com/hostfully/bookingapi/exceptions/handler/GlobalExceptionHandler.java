@@ -3,6 +3,8 @@ package com.hostfully.bookingapi.exceptions.handler;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
 import com.hostfully.bookingapi.exceptions.BookingPeriodInvalidException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -18,8 +20,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(ResourceNotFoundException.class)
     ProblemDetail handlerResourceNotFoundException(ResourceNotFoundException exception){
+        LOG.error("Finding resource error: {}", exception.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
         problemDetail.setTitle("Resource not found.");
 
@@ -28,6 +34,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookingPeriodInvalidException.class)
     ProblemDetail handlerBookingPeriodInvalidException(BookingPeriodInvalidException exception){
+        LOG.error("Booking period invalid error: {}", exception.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
         problemDetail.setTitle("Booking period is invalid.");
 
@@ -36,6 +44,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DateTimeParseException.class)
     ProblemDetail handlerDateTimeParseException(DateTimeParseException exception){
+        LOG.error("Period invalid error: {}", exception.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
         problemDetail.setTitle("Some Date value is invalid.");
 
@@ -44,6 +54,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ProblemDetail handlerMethodArgumentNotValidException(MethodArgumentNotValidException exception){
+        LOG.error("Validation fields error: {}", exception.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "There are some validation errors");
         problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("Validation Errors", getErrors(exception));
@@ -61,11 +73,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookingOverlappingException.class)
     ProblemDetail handlerBookingOverlappingException(BookingOverlappingException exception){
+        LOG.error("Booking overllaping error: {}", exception.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "There is a overlapping occurency");
         problemDetail.setTitle("Bad Request");
 
         return problemDetail;
     }
-
-
 }

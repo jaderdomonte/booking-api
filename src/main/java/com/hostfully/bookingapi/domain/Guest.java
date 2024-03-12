@@ -15,18 +15,13 @@ public class Guest extends ValidatedDomain {
         this.id = id;
     }
 
-    public Guest(GuestNameVO fullName){
-        this.fullName = fullName;
-        validateFullName();
-    }
-
     public Guest(Long id, GuestNameVO fullName) {
         this.id = id;
         this.fullName = fullName;
-        validateFullName();
+        validate();
     }
 
-    private void validateFullName(){
+    protected void validate(){
         validateField(id == null && fullName == null, "Guest fullName is required.");
     }
 }

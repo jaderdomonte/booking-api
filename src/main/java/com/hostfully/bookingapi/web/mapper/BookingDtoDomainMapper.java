@@ -1,7 +1,7 @@
 package com.hostfully.bookingapi.web.mapper;
 
+import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.domain.*;
-import com.hostfully.bookingapi.infrastructure.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
 import com.hostfully.bookingapi.web.dto.GuestDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;

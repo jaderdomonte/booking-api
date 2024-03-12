@@ -14,10 +14,10 @@ public class BookingPeriodVO extends ValidatedDomain {
     public BookingPeriodVO(LocalDate checkIn, LocalDate checkOut) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        validateAllFields();
+        validate();
     }
 
-    private void validateAllFields(){
+    protected void validate(){
         validateField(checkIn == null || checkOut == null, "CheckIn and CheckOut are required.");
         validateField(checkIn.isEqual(checkOut) || checkIn.isAfter(checkOut), "CheckOut date should be greater than CheckIn date.");
     }

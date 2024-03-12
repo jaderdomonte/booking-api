@@ -12,15 +12,15 @@ public class BookingStatusVO extends ValidatedDomain {
 
     public BookingStatusVO(String description){
         this.description = description;
-        validateDescription();
+        validate();
     }
 
     public BookingStatusVO(Long id, String description) {
         this(description);
-        this.description = description;
+        this.id = id;
     }
 
-    private void validateDescription(){
-        validateField(StringUtils.isEmpty(description), "Status description is required.");
+    protected void validate(){
+        validateField(StringUtils.isEmpty(description), "Description is required.");
     }
 }

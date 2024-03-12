@@ -23,7 +23,7 @@ public class Booking extends ValidatedDomain {
         this.property = property;
         this.period = period;
         this.status = status;
-        validateAllFields();
+        validate();
     }
 
     public Booking(Guest guest, Property property, BookingPeriodVO period, BookingStatusVO status) {
@@ -31,7 +31,7 @@ public class Booking extends ValidatedDomain {
         this.property = property;
         this.period = period;
         this.status = status;
-        validateAllFields();
+        validate();
     }
 
     public Booking(Guest guest, BookingPeriodVO period) {
@@ -45,8 +45,13 @@ public class Booking extends ValidatedDomain {
         validateField(period == null, "Period is required.");
     }
 
-    private void validateAllFields(){
-        validateGuestAndPeriod();
+    private void validatePropertyAndStatus(){
+        validateField(property == null, "Property is required.");
         validateField(status == null, "Status is required.");
+    }
+
+    protected void validate(){
+        validatePropertyAndStatus();
+        validateGuestAndPeriod();
     }
 }

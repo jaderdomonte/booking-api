@@ -1,7 +1,6 @@
 package com.hostfully.bookingapi.domain;
 
-import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
-import com.hostfully.bookingapi.infrastructure.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,20 +17,17 @@ public class Blocking extends ValidatedDomain {
     public Blocking(Long id, Property property, BookingPeriod period) {
         this(property, period);
         this.id = id;
-        validatePropertyAndPeriod();
+        validate();
     }
 
     public Blocking(Property property, BookingPeriod period) {
         this.property = property;
         this.period = period;
-        validatePropertyAndPeriod();
+        validate();
     }
 
-    public Blocking(BookingPeriod period) {
-        this.property = property;
-    }
-
-    private void validatePropertyAndPeriod(){
+    @Override
+    protected void validate(){
         validateField(property == null, "Property is required.");
         validateField(period == null, "Period is required.");
     }

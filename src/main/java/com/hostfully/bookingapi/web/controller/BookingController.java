@@ -29,79 +29,67 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
-        LOG.info("Request received at getAllBookings"); // TODO: tomar como modelo
+        LOG.info("Receiving a GET to return all Bookings"); // TODO: tomar como modelo
 
         List<Booking> allBookings = useCase.getAllBookings();
         List<BookingResponse> responseBody = allBookings.stream().map(booking -> mapper.fromDomainToResponse(booking)).toList();
 
-        LOG.info("Request finished succesfully");
         return ResponseEntity.ok(responseBody);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id){
-        LOG.info("Request received at getBookingById"); // TODO: tomar como modelo
+        LOG.info("Receiving a GET to return Booking with id {}", id); // TODO: tomar como modelo
 
         Booking booking = useCase.getBookingById(id);
         BookingResponse responseBody = mapper.fromDomainToResponse(booking);
 
-        LOG.info("Request finished succesfully");
         return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping
     public ResponseEntity<Void> createBooking(@RequestBody @Valid BookingCreateRequest request){
-        LOG.info("Request received at createBooking");
+        LOG.info("Receiving a POST to create Booking");
 
         Booking booking = mapper.fromRequestToDomain(request);
         useCase.createBooking(booking);
-
-        LOG.info("Request finished succesfully");
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateBooking(@PathVariable Long id, @RequestBody @Valid BookingUpdateRequest request){
-        LOG.info("Request received at updateBooking");
+        LOG.info("Receiving a PUT to update Booking with id {}", id);
 
         Booking booking = mapper.fromRequestToDomain(request);
         useCase.updateBooking(id, booking);
-
-        LOG.info("Request finished succesfully");
 
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<Void> cancelBooking(@PathVariable Long id){
-        LOG.info("Request received at cancelBooking");
+        LOG.info("Receiving a PATCH to cancel Booking with id {}", id);
 
         useCase.cancelBooking(id);
-
-        LOG.info("Request finished succesfully");
 
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/activate/{id}")
     public ResponseEntity<Void> activateBooking(@PathVariable Long id){
-        LOG.info("Request received at activateBooking");
+        LOG.info("Receiving a PATCH to activate Booking with id {}", id);
 
         useCase.activateBooking(id);
-
-        LOG.info("Request finished succesfully");
 
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
-        LOG.info("Request received at deleteBooking");
+        LOG.info("Receiving a DELETE to delete Booking with id {}", id);
 
         useCase.deleteBooking(id);
-
-        LOG.info("Request finished succesfully");
 
         return ResponseEntity.noContent().build();
     }

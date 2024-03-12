@@ -1,0 +1,17 @@
+com\hostfully\bookingapi\web\mapper\BlockingDtoDomainMapperTest.class
+com\hostfully\bookingapi\domain\GuestTest.class
+com\hostfully\bookingapi\usecases\BookingUseCaseTest.class
+com\hostfully\bookingapi\BookingApiApplicationTests.class
+com\hostfully\bookingapi\web\controller\BlockingControllerTest.class
+com\hostfully\bookingapi\db\mapper\BlockingEntityDomainMapperTest.class
+com\hostfully\bookingapi\domain\GuestNameVOTest.class
+com\hostfully\bookingapi\domain\BookingPeriodVOTest.class
+com\hostfully\bookingapi\usecases\BlockingUseCaseTest.class
+com\hostfully\bookingapi\db\validation\OverlappingValidationTest.class
+com\hostfully\bookingapi\domain\PropertyTest.class
+com\hostfully\bookingapi\domain\BlockingTest.class
+com\hostfully\bookingapi\domain\BookingTest.class
+com\hostfully\bookingapi\web\controller\BookingControllerTest.class
+com\hostfully\bookingapi\domain\BookingStatusVOTest.class
+com\hostfully\bookingapi\web\mapper\BookingDtoDomainMapperTest.class
+com\hostfully\bookingapi\db\mapper\BookingEntityDomainMapperTest.class

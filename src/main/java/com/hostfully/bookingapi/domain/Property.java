@@ -23,10 +23,10 @@ public class Property extends ValidatedDomain {
     public Property(Long id, String name) {
         this(name);
         this.id = id;
-        validateName();
+        validate();
     }
 
-    private void validateName(){
+    protected void validate(){
         validateField(id == null && StringUtils.isEmpty(name), "Property name is required.");
     }
 }

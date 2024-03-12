@@ -13,10 +13,10 @@ public class GuestNameVO extends ValidatedDomain {
     public GuestNameVO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        validateFullName();
+        validate();
     }
 
-    private void validateFullName(){
+    protected void validate(){
         validateField(StringUtils.isEmpty(firstName) || StringUtils.isEmpty(lastName), "Guest firstName and lastName are required.");
     }
 }
