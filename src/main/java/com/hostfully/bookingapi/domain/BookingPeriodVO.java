@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class BookingPeriodVO extends ValidatedDomain {
+public class BookingPeriodVO implements ValidatedDomain {
 
     private LocalDate checkIn;
 
@@ -17,7 +17,7 @@ public class BookingPeriodVO extends ValidatedDomain {
         validate();
     }
 
-    protected void validate(){
+    public void validate(){
         validateField(checkIn == null || checkOut == null, "CheckIn and CheckOut are required.");
         validateField(checkIn.isBefore(LocalDate.now()), "CheckIn date should be equals or greater than today.");
         validateField(checkOut.isBefore(LocalDate.now()), "CheckOut date should greater than today.");

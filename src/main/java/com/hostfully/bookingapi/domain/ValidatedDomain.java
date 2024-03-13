@@ -2,11 +2,12 @@ package com.hostfully.bookingapi.domain;
 
 import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 
-public abstract class ValidatedDomain {
+public interface ValidatedDomain {
 
-    protected abstract void validate();
+    void validate();
 
-    protected void validateField(boolean condition, String s) {
+
+    default void validateField(boolean condition, String s) {
         if (condition) {
             throw new DomainObjectValidationException(s);
         }

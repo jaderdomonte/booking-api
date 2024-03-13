@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Blocking extends ValidatedDomain {
+public class Blocking implements ValidatedDomain {
 
     private Long id;
 
@@ -25,8 +25,7 @@ public class Blocking extends ValidatedDomain {
         validate();
     }
 
-    @Override
-    protected void validate(){
+    public void validate(){
         validateField(property == null, "Property is required.");
         validateField(period == null, "Period is required.");
     }

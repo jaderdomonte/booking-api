@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 @Getter
-public class BookingStatusVO extends ValidatedDomain {
+public class BookingStatusVO implements ValidatedDomain {
 
     private Long id;
 
@@ -20,7 +20,7 @@ public class BookingStatusVO extends ValidatedDomain {
         this.id = id;
     }
 
-    protected void validate(){
+    public void validate(){
         validateField(StringUtils.isEmpty(description), "Description is required.");
     }
 }

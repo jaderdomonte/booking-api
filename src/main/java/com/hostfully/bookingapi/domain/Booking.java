@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Booking extends ValidatedDomain {
+public class Booking implements ValidatedDomain {
 
     private Long id;
 
@@ -50,7 +50,7 @@ public class Booking extends ValidatedDomain {
         validateField(status == null, "Status is required.");
     }
 
-    protected void validate(){
+    public void validate(){
         validatePropertyAndStatus();
         validateGuestAndPeriod();
     }

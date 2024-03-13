@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Guest extends ValidatedDomain {
+public class Guest implements ValidatedDomain {
 
     private Long id;
 
@@ -21,7 +21,7 @@ public class Guest extends ValidatedDomain {
         validate();
     }
 
-    protected void validate(){
+    public void validate(){
         validateField(id == null && fullName == null, "Guest fullName is required.");
     }
 }

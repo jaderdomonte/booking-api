@@ -1,7 +1,6 @@
 package com.hostfully.bookingapi.exceptions.handler;
 
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
-import com.hostfully.bookingapi.exceptions.BookingPeriodInvalidException;
 import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -29,16 +28,6 @@ public class GlobalExceptionHandler {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
         problemDetail.setTitle("Resource not found.");
-
-        return problemDetail;
-    }
-
-    @ExceptionHandler(BookingPeriodInvalidException.class)
-    ProblemDetail handlerBookingPeriodInvalidException(BookingPeriodInvalidException exception){
-        LOG.error("Booking period invalid error: {}", exception.getMessage());
-
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-        problemDetail.setTitle("Booking period is invalid.");
 
         return problemDetail;
     }
