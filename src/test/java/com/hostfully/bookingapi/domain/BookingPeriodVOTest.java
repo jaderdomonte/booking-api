@@ -59,6 +59,24 @@ class BookingPeriodVOTest {
     }
 
     @Test
+    void shouldThrowsExceptionIfCheckInIsInThePast() {
+        DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
+            new BookingPeriodVO(LocalDate.now().minusDays(1), LocalDate.now());
+        });
+
+        assertEquals("CheckIn date should be equals or greater than today.", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowsExceptionIfCheckOutIsInThePast() {
+        DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
+            new BookingPeriodVO(LocalDate.now(), LocalDate.now().minusDays(1));
+        });
+
+        assertEquals("CheckOut date should greater than today.", exception.getMessage());
+    }
+
+    @Test
     void shouldCreateDomainObjectWithRequiredFields() {
         BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
 

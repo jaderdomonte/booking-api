@@ -5,6 +5,7 @@ import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.db.mapper.BookingEntityDomainMapper;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.db.repository.GuestRepository;
+import com.hostfully.bookingapi.db.repository.PropertyRepository;
 import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.*;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
@@ -36,6 +37,9 @@ class BookingUseCaseTest {
 
     @Mock
     private GuestRepository guestRepository;
+
+    @Mock
+    private PropertyRepository propertyRepository;
 
     @Mock
     private OverlappingValidation overlappingValidation;
@@ -103,6 +107,7 @@ class BookingUseCaseTest {
         when(mapper.toEntity(any())).thenReturn(entity);
         doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
         when(bookingRepository.save(any())).thenReturn(entity);
+        when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
 
         useCase.createBooking(domain);
 
@@ -113,6 +118,7 @@ class BookingUseCaseTest {
     @Test
     void shouldThrowExceptionWhenThereIsOverlappingPeriodOnCreate() {
         when(mapper.toEntity(any())).thenReturn(entity);
+        when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
         doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
 
         assertThrows(BookingOverlappingException.class, () -> {
@@ -120,6 +126,20 @@ class BookingUseCaseTest {
         });
 
         verify(overlappingValidation, only()).checkOverlappingPeriod(any(), any());
+        verify(propertyRepository, only()).findById(any());
+        verify(bookingRepository, never()).save(any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenPropertyDoesNotExistsOnCreate() {
+        when(mapper.toEntity(any())).thenReturn(entity);
+        when(propertyRepository.findById(any())).thenThrow(new ResourceNotFoundException("Message"));
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            useCase.createBooking(domain);
+        });
+
+        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any());
         verify(bookingRepository, never()).save(any());
     }
 

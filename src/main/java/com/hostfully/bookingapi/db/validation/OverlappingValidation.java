@@ -1,5 +1,6 @@
 package com.hostfully.bookingapi.db.validation;
 
+import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
@@ -7,8 +8,6 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 @AllArgsConstructor
@@ -20,13 +19,13 @@ public class OverlappingValidation {
 
     private final BlockingRepository blockingRepository;
 
-    public void checkOverlappingPeriod(LocalDate checkIn, LocalDate checkOut) {
-        checkOverllapingBlocking(checkIn, checkOut);
-        checkOverllapingBooking(checkIn, checkOut);
+    public void checkOverlappingPeriod(Long propertyId, BookingPeriod period) {
+        checkOverllapingBlocking(propertyId, period);
+        checkOverllapingBooking(propertyId, period);
     }
 
-    private void checkOverllapingBlocking(LocalDate checkIn, LocalDate checkOut) {
-        int overlappingBlockingsCount = blockingRepository.checkOverlapping(checkIn, checkOut);
+    private void checkOverllapingBlocking(Long propertyId, BookingPeriod period) {
+        int overlappingBlockingsCount = blockingRepository.checkOverlapping(propertyId, period);
 //        List<BlockingEntity> blockingEntities = blockingRepository.checkOverlappingBlockings(checkIn, checkOut);
 
         if (overlappingBlockingsCount > 0) {
@@ -34,8 +33,8 @@ public class OverlappingValidation {
         }
     }
 
-    private void checkOverllapingBooking(LocalDate checkIn, LocalDate checkOut) {
-        int overlappingBookingCount = bookingRepository.checkOverlapping(checkIn, checkOut);
+    private void checkOverllapingBooking(Long propertyId, BookingPeriod period) {
+        int overlappingBookingCount = bookingRepository.checkOverlapping(propertyId, period);
 //        List<BookingEntity> bookingEntities = bookingRepository.checkOverlappingBookings(checkIn, checkOut);
 
         if (overlappingBookingCount > 0) {

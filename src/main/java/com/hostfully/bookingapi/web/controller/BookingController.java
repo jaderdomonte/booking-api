@@ -29,7 +29,7 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
-        LOG.info("Receiving a GET to return all Bookings"); // TODO: tomar como modelo
+        LOG.info("Receiving a GET to return all Bookings");
 
         List<Booking> allBookings = useCase.getAllBookings();
         List<BookingResponse> responseBody = allBookings.stream().map(booking -> mapper.fromDomainToResponse(booking)).toList();
@@ -39,7 +39,7 @@ public class BookingController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id){
-        LOG.info("Receiving a GET to return Booking with id {}", id); // TODO: tomar como modelo
+        LOG.info("Receiving a GET to return Booking with id {}", id);
 
         Booking booking = useCase.getBookingById(id);
         BookingResponse responseBody = mapper.fromDomainToResponse(booking);

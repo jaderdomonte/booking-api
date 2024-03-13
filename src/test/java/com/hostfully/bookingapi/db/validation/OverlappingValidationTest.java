@@ -1,5 +1,6 @@
 package com.hostfully.bookingapi.db.validation;
 
+import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
@@ -30,14 +31,11 @@ class OverlappingValidationTest {
     @Mock
     private BlockingRepository blockingRepository;
 
-    private LocalDate checkIn;
-
-    private LocalDate checkOut;
+    private BookingPeriod period;
 
     @BeforeEach
     void setUp(){
-        checkIn = LocalDate.now();
-        checkOut = LocalDate.now().plusDays(10);
+        period = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
     }
 
     @Test
@@ -45,7 +43,7 @@ class OverlappingValidationTest {
         when(bookingRepository.checkOverlapping(any(), any())).thenReturn(0);
         when(blockingRepository.checkOverlapping(any(), any())).thenReturn(0);
 
-        validation.checkOverlappingPeriod(checkIn, checkOut);
+        validation.checkOverlappingPeriod(1L, period);
 
         assertDoesNotThrow(() -> BookingOverlappingException.class);
         verify(blockingRepository).checkOverlapping(any(), any());
@@ -57,7 +55,7 @@ class OverlappingValidationTest {
         when(blockingRepository.checkOverlapping(any(), any())).thenReturn(1);
 
         Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(checkIn, checkOut);
+            validation.checkOverlappingPeriod(1L, period);
         });
 
         verify(blockingRepository).checkOverlapping(any(), any());
@@ -68,7 +66,7 @@ class OverlappingValidationTest {
         when(bookingRepository.checkOverlapping(any(), any())).thenReturn(1);
 
         Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(checkIn, checkOut);
+            validation.checkOverlappingPeriod(1L, period);
         });
 
         verify(bookingRepository).checkOverlapping(any(), any());

@@ -1,6 +1,5 @@
 package com.hostfully.bookingapi.domain;
 
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,7 @@ class BlockingTest {
     @Test
     void shouldThrowsExceptionIfCreateDomainObjectWithoutProperty() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+            BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
             new Blocking(null, bookingPeriod);
         });
 
@@ -43,7 +42,7 @@ class BlockingTest {
     @Test
     void shouldCreateDomainObjectWithRequiredFields() {
         Property property = new Property(1L);
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         new Blocking(property, bookingPeriod);
 
         assertDoesNotThrow(() -> DomainObjectValidationException.class);

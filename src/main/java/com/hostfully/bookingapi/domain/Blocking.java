@@ -1,6 +1,5 @@
 package com.hostfully.bookingapi.domain;
 
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,15 +11,15 @@ public class Blocking extends ValidatedDomain {
 
     private Property property;
 
-    private BookingPeriod period;
+    private BookingPeriodVO period;
 
-    public Blocking(Long id, Property property, BookingPeriod period) {
+    public Blocking(Long id, Property property, BookingPeriodVO period) {
         this(property, period);
         this.id = id;
         validate();
     }
 
-    public Blocking(Property property, BookingPeriod period) {
+    public Blocking(Property property, BookingPeriodVO period) {
         this.property = property;
         this.period = period;
         validate();

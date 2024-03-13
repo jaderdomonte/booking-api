@@ -1,13 +1,12 @@
 package com.hostfully.bookingapi.db.repository;
 
 import com.hostfully.bookingapi.db.entity.BookingEntity;
+import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
@@ -20,12 +19,13 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
 
     @Query("SELECT COUNT(b.id) " +
             "FROM BookingEntity b " +
-            "WHERE ((b.period.checkIn <= :checkIn AND b.period.checkOut >= :checkIn) OR (b.period.checkIn <= :checkOut AND b.period.checkOut >= :checkIn))" +
-            "AND b.status.id = 1")
-    int checkOverlapping(@Param("checkIn") LocalDate checkIn, @Param("checkOut") LocalDate checkOut);
+            "WHERE ( " +
+            "(b.period.checkIn <= :#{#period.checkIn} AND b.period.checkOut >= :#{#period.checkIn}) OR " +
+            "(b.period.checkIn <= :#{#period.checkOut} AND b.period.checkOut >= :#{#period.checkOut}) OR " +
+            "(b.period.checkIn >= :#{#period.checkIn} AND b.period.checkOut <= :#{#period.checkOut})" +
+            ") " +
+            "AND b.status.id = 1 " +
+            "AND b.property.id = :propertyId")
+    int checkOverlapping(@Param("propertyId") Long propertyId, @Param("period") BookingPeriod period);
 
-    @Query("FROM BookingEntity b " +
-            "WHERE ((b.period.checkIn <= :checkIn AND b.period.checkOut >= :checkIn) OR (b.period.checkIn <= :checkOut AND b.period.checkOut >= :checkIn))" +
-            "AND b.status.id = 1")
-    List<BookingEntity> checkOverlappingBookings(@Param("checkIn") LocalDate checkIn, @Param("checkOut") LocalDate checkOut);
 }

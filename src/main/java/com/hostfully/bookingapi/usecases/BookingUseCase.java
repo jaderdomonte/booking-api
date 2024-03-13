@@ -1,12 +1,13 @@
 package com.hostfully.bookingapi.usecases;
 
-import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.db.entity.BookingEntity;
 import com.hostfully.bookingapi.db.entity.GuestEntity;
 import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.db.mapper.BookingEntityDomainMapper;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.db.repository.GuestRepository;
+import com.hostfully.bookingapi.db.repository.PropertyRepository;
+import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Booking;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,8 @@ public class BookingUseCase {
     private final BookingRepository bookingRepository;
 
     private final GuestRepository guestRepository;
+
+    private final PropertyRepository propertyRepository;
 
     private final OverlappingValidation overlappingValidation;
 
@@ -50,8 +53,11 @@ public class BookingUseCase {
         LOG.info("Starting creating Booking");
         BookingEntity entity = bookingEntityDomainMapper.toEntity(domain);
 
+        // TODO: colocar esse cenário nos testes
+        propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Property with id: " + entity.getProperty().getId()));
+
         // TODO: validar se a propriedade não está alugada ou bloqueada nesse período
-        overlappingValidation.checkOverlappingPeriod(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
+        overlappingValidation.checkOverlappingPeriod(domain.getProperty().getId(), entity.getPeriod());
         bookingRepository.save(entity);
         LOG.info("Booking created");
     }
@@ -68,12 +74,12 @@ public class BookingUseCase {
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
         GuestEntity guestEntity = guestRepository.findById(booking.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Guest with id " + booking.getGuest().getId()));
 
-        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
-        overlappingValidation.checkOverlappingPeriod(booking.getPeriod().getCheckIn(), booking.getPeriod().getCheckOut());
-
         entity.getPeriod().setCheckIn(booking.getPeriod().getCheckIn());
         entity.getPeriod().setCheckOut(booking.getPeriod().getCheckOut());
         entity.setGuest(guestEntity);
+
+        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
+        overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
 
         bookingRepository.save(entity);
         LOG.info("Booking {} updated", id);
@@ -93,7 +99,7 @@ public class BookingUseCase {
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
 
         // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
-        overlappingValidation.checkOverlappingPeriod(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
+        overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
         bookingRepository.changeBookingStatus(id, BookingStatusEnum.CONFIRMED.getId());
         LOG.info("Booking {} activated", id);
     }

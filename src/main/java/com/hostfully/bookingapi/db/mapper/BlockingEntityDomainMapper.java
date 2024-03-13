@@ -4,6 +4,7 @@ import com.hostfully.bookingapi.db.entity.BlockingEntity;
 import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.db.entity.PropertyEntity;
 import com.hostfully.bookingapi.domain.Blocking;
+import com.hostfully.bookingapi.domain.BookingPeriodVO;
 import com.hostfully.bookingapi.domain.Property;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class BlockingEntityDomainMapper {
 
     public Blocking toDomain(BlockingEntity entity){
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(entity.getPeriod().getCheckIn()).checkOut(entity.getPeriod().getCheckOut()).build();
+        BookingPeriodVO bookingPeriod = new BookingPeriodVO(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
         Property property = new Property(entity.getProperty().getId(), entity.getProperty().getName());
         return new Blocking(entity.getId(), property, bookingPeriod);
     }

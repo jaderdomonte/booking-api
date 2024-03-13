@@ -19,6 +19,8 @@ public class BookingPeriodVO extends ValidatedDomain {
 
     protected void validate(){
         validateField(checkIn == null || checkOut == null, "CheckIn and CheckOut are required.");
+        validateField(checkIn.isBefore(LocalDate.now()), "CheckIn date should be equals or greater than today.");
+        validateField(checkOut.isBefore(LocalDate.now()), "CheckOut date should greater than today.");
         validateField(checkIn.isEqual(checkOut) || checkIn.isAfter(checkOut), "CheckOut date should be greater than CheckIn date.");
     }
 }

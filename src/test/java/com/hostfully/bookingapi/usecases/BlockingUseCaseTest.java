@@ -5,8 +5,10 @@ import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.db.entity.PropertyEntity;
 import com.hostfully.bookingapi.db.mapper.BlockingEntityDomainMapper;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
+import com.hostfully.bookingapi.db.repository.PropertyRepository;
 import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Blocking;
+import com.hostfully.bookingapi.domain.BookingPeriodVO;
 import com.hostfully.bookingapi.domain.Property;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
@@ -39,6 +41,9 @@ class BlockingUseCaseTest {
     private BlockingRepository blockingRepository;
 
     @Mock
+    private PropertyRepository propertyRepository;
+
+    @Mock
     private OverlappingValidation overlappingValidation;
 
     @Mock
@@ -51,7 +56,7 @@ class BlockingUseCaseTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         domain = new Blocking(property, bookingPeriod);
 
         BookingPeriod bookingPeriodEntity = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
@@ -74,16 +79,20 @@ class BlockingUseCaseTest {
         when(mapper.toEntity(any())).thenReturn(entity);
         doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
         when(blockingRepository.save(any())).thenReturn(BlockingEntity.builder().build());
+        when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
 
         useCase.createBlocking(domain);
 
         verify(overlappingValidation).checkOverlappingPeriod(any(), any());
         verify(blockingRepository).save(any());
+        verify(propertyRepository).findById(any());
+        verify(propertyRepository).findById(any());
     }
 
     @Test
     void shouldThrowExceptionWhenThereIsOverlappingPeriodOnCreate() {
         when(mapper.toEntity(any())).thenReturn(entity);
+        when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
         doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
 
         assertThrows(BookingOverlappingException.class, () -> {
@@ -92,6 +101,7 @@ class BlockingUseCaseTest {
 
         verify(overlappingValidation, only()).checkOverlappingPeriod(any(), any());
         verify(blockingRepository, never()).save(any());
+        verify(propertyRepository).findById(any());
     }
 
     @Test
@@ -119,12 +129,7 @@ class BlockingUseCaseTest {
     void shouldUpdateBlocking(){
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        LocalDate nextWeek = LocalDate.now().plusDays(7);
-        LocalDate nextWeekPlusOne = LocalDate.now().plusDays(8);
-
         BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
-        BookingPeriod period = BookingPeriod.builder().checkIn(nextWeek).checkOut(nextWeekPlusOne).build();
-        BlockingEntity entity = BlockingEntity.builder().period(period).build();
 
         when(blockingRepository.save(any())).thenReturn(entity);
         doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
@@ -149,7 +154,8 @@ class BlockingUseCaseTest {
 
         BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
         BookingPeriod period = BookingPeriod.builder().checkIn(nextWeek).checkOut(nextWeekPlusOne).build();
-        BlockingEntity entity = BlockingEntity.builder().period(period).build();
+        PropertyEntity propertyEntity = PropertyEntity.builder().id(1L).build();
+        BlockingEntity entity = BlockingEntity.builder().period(period).property(propertyEntity).build();
 
         when(blockingRepository.findById(any())).thenReturn(Optional.of(entity));
         doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());

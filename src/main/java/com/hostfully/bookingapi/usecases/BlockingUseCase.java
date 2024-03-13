@@ -1,9 +1,10 @@
 package com.hostfully.bookingapi.usecases;
 
-import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.db.entity.BlockingEntity;
 import com.hostfully.bookingapi.db.mapper.BlockingEntityDomainMapper;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
+import com.hostfully.bookingapi.db.repository.PropertyRepository;
+import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Blocking;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
@@ -22,6 +23,8 @@ public class BlockingUseCase {
 
     private final BlockingRepository blockingRepository;
 
+    private final PropertyRepository propertyRepository;
+
     private final OverlappingValidation overlappingValidation;
 
     private final BlockingEntityDomainMapper blockingEntityDomainMapper;
@@ -37,8 +40,11 @@ public class BlockingUseCase {
         LOG.info("Starting creating Blocking");
         BlockingEntity entity = blockingEntityDomainMapper.toEntity(blocking);
 
+        // TODO: colocar esse cenário nos testes
+        propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Property with id: " + entity.getProperty().getId()));
+
         // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
-        overlappingValidation.checkOverlappingPeriod(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
+        overlappingValidation.checkOverlappingPeriod(blocking.getProperty().getId(), entity.getPeriod());
 
         blockingRepository.save(entity);
         LOG.info("Blocking created");
@@ -55,11 +61,11 @@ public class BlockingUseCase {
         LOG.info("Starting updating Blocking {}", id);
         BlockingEntity entity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Block with id: " + id));
 
-        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
-        overlappingValidation.checkOverlappingPeriod(bookingPeriod.checkIn(), bookingPeriod.checkOut());
-
         entity.getPeriod().setCheckIn(bookingPeriod.checkIn());
         entity.getPeriod().setCheckOut(bookingPeriod.checkOut());
+
+        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
+        overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
 
         blockingRepository.save(entity);
         LOG.info("Blocking {} updated", id);

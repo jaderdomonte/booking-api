@@ -1,7 +1,18 @@
 package com.hostfully.bookingapi.web.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class BookingDtoDomainMapperTest {
 
+    @Test
+    void fromDomainToResponse() {
+    }
+
+    @Test
+    void fromRequestToDomain() {
+    }
+
+    @Test
+    void testFromRequestToDomain() {
+    }
 }

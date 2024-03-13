@@ -4,19 +4,17 @@ import com.hostfully.bookingapi.db.entity.BlockingEntity;
 import com.hostfully.bookingapi.db.entity.BookingPeriod;
 import com.hostfully.bookingapi.db.entity.PropertyEntity;
 import com.hostfully.bookingapi.domain.Blocking;
+import com.hostfully.bookingapi.domain.BookingPeriodVO;
 import com.hostfully.bookingapi.domain.Property;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class BlockingEntityDomainMapperTest {
@@ -31,7 +29,7 @@ class BlockingEntityDomainMapperTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         domain = new Blocking(property, bookingPeriod);
 
         BookingPeriod bookingPeriodEntity = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
