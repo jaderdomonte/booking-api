@@ -7,6 +7,10 @@ import com.hostfully.bookingapi.web.mapper.BlockingDtoDomainMapper;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
 import com.hostfully.bookingapi.web.request.BlockingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BlockingResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/blockings")
 @AllArgsConstructor
+@Tag(name = "Blockings")
 public class BlockingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlockingController.class);
@@ -28,6 +33,8 @@ public class BlockingController {
 
     private final BlockingDtoDomainMapper mapper;
 
+    @Operation(summary = "Get all Blockings", description = "Returns all Blockings")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved")
     @GetMapping
     public ResponseEntity<List<BlockingResponse>> getAllBlockings(){
         LOG.info("Receiving a GET to return all Blockings");
@@ -37,6 +44,12 @@ public class BlockingController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @Operation(summary = "Create Blocking", description = "Creating a Blocking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Property was not found")
+    })
     @PostMapping
     public ResponseEntity<Void> createBlocking(@RequestBody @Valid BlockingCreateRequest request){
         LOG.info("Receiving a POST to create Blocking");
@@ -46,6 +59,12 @@ public class BlockingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(summary = "Update Blocking", description = "Updating a Blocking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Blocking was not found")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateBlocking(@PathVariable Long id, @Valid @RequestBody BlockingUpdateRequest request){
         LOG.info("Receiving a PUT to update Blocking with id {}", id);
@@ -56,6 +75,11 @@ public class BlockingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete Blocking", description = "Deleting a Blocking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Blocking was not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBlocking(@PathVariable Long id){
         LOG.info("Receiving a DELETE to delete Blocking with id {}", id);

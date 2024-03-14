@@ -108,6 +108,7 @@ class BookingUseCaseTest {
         doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
         when(bookingRepository.save(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
+        when(guestRepository.findById(any())).thenReturn(Optional.of(GuestEntity.builder().id(2L).build()));
 
         useCase.createBooking(domain);
 
@@ -119,6 +120,7 @@ class BookingUseCaseTest {
     void shouldThrowExceptionWhenThereIsOverlappingPeriodOnCreate() {
         when(mapper.toEntity(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
+        when(guestRepository.findById(any())).thenReturn(Optional.of(GuestEntity.builder().id(2L).build()));
         doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
 
         assertThrows(BookingOverlappingException.class, () -> {
@@ -127,6 +129,7 @@ class BookingUseCaseTest {
 
         verify(overlappingValidation, only()).checkOverlappingPeriod(any(), any());
         verify(propertyRepository, only()).findById(any());
+        verify(guestRepository, never()).save(any());
         verify(bookingRepository, never()).save(any());
     }
 
@@ -134,6 +137,7 @@ class BookingUseCaseTest {
     void shouldThrowExceptionWhenPropertyDoesNotExistsOnCreate() {
         when(mapper.toEntity(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenThrow(new ResourceNotFoundException("Message"));
+        when(guestRepository.findById(any())).thenReturn(Optional.of(GuestEntity.builder().id(2L).build()));
 
         assertThrows(ResourceNotFoundException.class, () -> {
             useCase.createBooking(domain);

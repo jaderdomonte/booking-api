@@ -52,9 +52,9 @@ public class BookingUseCase {
         LOG.info("Starting creating Booking");
         BookingEntity entity = bookingEntityDomainMapper.toEntity(domain);
 
+        guestRepository.findById(entity.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no  Guest with id " + entity.getGuest().getId()));
         propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no Property with id: " + entity.getProperty().getId()));
 
-        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período
         overlappingValidation.checkOverlappingPeriod(domain.getProperty().getId(), entity.getPeriod());
         bookingRepository.save(entity);
         LOG.info("Booking created");
@@ -67,7 +67,6 @@ public class BookingUseCase {
         LOG.info("Booking {} deleted", id);
     }
 
-    // TODO: tem problema pois está apontando overlapping para o mesmo booking
     public void updateBooking(Long id, Booking booking){
         LOG.info("Starting updating Booking {}", id);
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));

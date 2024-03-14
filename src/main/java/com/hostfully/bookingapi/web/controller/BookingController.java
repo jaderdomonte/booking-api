@@ -6,6 +6,10 @@ import com.hostfully.bookingapi.web.mapper.BookingDtoDomainMapper;
 import com.hostfully.bookingapi.web.request.BookingCreateRequest;
 import com.hostfully.bookingapi.web.request.BookingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BookingResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -19,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/bookings")
 @AllArgsConstructor
+@Tag(name = "Bookings")
 public class BookingController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BookingController.class);
@@ -27,6 +32,8 @@ public class BookingController {
 
     private final BookingDtoDomainMapper mapper;
 
+    @Operation(summary = "Get all Bookings", description = "Returns all Bookings")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved")
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
         LOG.info("Receiving a GET to return all Bookings");
@@ -37,6 +44,11 @@ public class BookingController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @Operation(summary = "Get a Booking by id", description = "Returns a Booking as per the id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id){
         LOG.info("Receiving a GET to return Booking with id {}", id);
@@ -47,6 +59,12 @@ public class BookingController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @Operation(summary = "Create Booking", description = "Creating a Booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Property/Guest was not found")
+    })
     @PostMapping
     public ResponseEntity<Void> createBooking(@RequestBody @Valid BookingCreateRequest request){
         LOG.info("Receiving a POST to create Booking");
@@ -57,6 +75,12 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(summary = "Update Booking", description = "Updating a Booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Booking/Guest was not found")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateBooking(@PathVariable Long id, @RequestBody @Valid BookingUpdateRequest request){
         LOG.info("Receiving a PUT to update Booking with id {}", id);
@@ -67,6 +91,11 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Delete Booking", description = "Deleting a Booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
+    })
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<Void> cancelBooking(@PathVariable Long id){
         LOG.info("Receiving a PATCH to cancel Booking with id {}", id);
@@ -76,6 +105,12 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Activate Booking", description = "Activating a Booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully activated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
+    })
     @PatchMapping("/activate/{id}")
     public ResponseEntity<Void> activateBooking(@PathVariable Long id){
         LOG.info("Receiving a PATCH to activate Booking with id {}", id);
@@ -85,6 +120,11 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Cancel Booking", description = "Canceling a Booking")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully canceled"),
+            @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
         LOG.info("Receiving a DELETE to delete Booking with id {}", id);
