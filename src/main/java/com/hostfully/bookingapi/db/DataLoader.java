@@ -2,10 +2,7 @@ package com.hostfully.bookingapi.db;
 
 import com.hostfully.bookingapi.db.entity.*;
 import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
-import com.hostfully.bookingapi.db.repository.BookingRepository;
-import com.hostfully.bookingapi.db.repository.BookingStatusRepository;
-import com.hostfully.bookingapi.db.repository.GuestRepository;
-import com.hostfully.bookingapi.db.repository.PropertyRepository;
+import com.hostfully.bookingapi.db.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -26,12 +23,15 @@ public class DataLoader implements CommandLineRunner {
 
     private final BookingRepository bookingRepository;
 
+    private final BlockingRepository blockingRepository;
+
     @Override
     public void run(String... args) throws Exception {
         createProperties();
         createGuests();
         createBookingStatus();
         createBookings();
+        createBlockings();
     }
 
     private void createBookingStatus() {
@@ -68,16 +68,27 @@ public class DataLoader implements CommandLineRunner {
 
     private void createBookings() {
         GuestEntity guest = GuestEntity.builder().id(1L).build();
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         BookingStatusEntity bookingStatusEntity = new BookingStatusEntity(BookingStatusEnum.CONFIRMED.getId());
         PropertyEntity propertyEntity = PropertyEntity.builder().id(1L).name("Lakefront Escape").build();
 
         bookingRepository.save(BookingEntity.builder().guest(guest).property(propertyEntity).period(bookingPeriod).status(bookingStatusEntity).build());
 
         GuestEntity guest2 = GuestEntity.builder().id(2L).build();
-        BookingPeriod bookingPeriod2 = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        BookingPeriod bookingPeriod2 = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         PropertyEntity propertyEntity2 = PropertyEntity.builder().id(2L).name("Beachside Home").build();
 
         bookingRepository.save(BookingEntity.builder().guest(guest2).property(propertyEntity2).period(bookingPeriod2).status(bookingStatusEntity).build());
+    }
+
+    private void createBlockings() {
+        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
+        PropertyEntity villageCabin = PropertyEntity.builder().id(3L).name("Village Cabin").build();
+
+        blockingRepository.save(BlockingEntity.builder().property(villageCabin).period(bookingPeriod).build());
+
+        PropertyEntity laPremiunSuite = PropertyEntity.builder().id(4L).name("LA Premiun Suite").build();
+
+        blockingRepository.save(BlockingEntity.builder().property(laPremiunSuite).period(bookingPeriod).build());
     }
 }

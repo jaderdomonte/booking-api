@@ -39,7 +39,7 @@ class OverlappingValidationTest {
     }
 
     @Test
-    void shouldCheckOverlappingPeriodOnSucess(){
+    void shouldCheckOverlappingPeriodSucess(){
         when(bookingRepository.checkOverlapping(any(), any())).thenReturn(0);
         when(blockingRepository.checkOverlapping(any(), any())).thenReturn(0);
 
@@ -70,5 +70,39 @@ class OverlappingValidationTest {
         });
 
         verify(bookingRepository).checkOverlapping(any(), any());
+    }
+
+    @Test
+    void shouldCheckOverlappingPeriodSucessOnUpdate(){
+        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(0);
+        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(0);
+
+        validation.checkOverlappingPeriod(1L, 1L, period);
+
+        assertDoesNotThrow(() -> BookingOverlappingException.class);
+        verify(blockingRepository).checkOverlapping(any(), any(), any());
+        verify(bookingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenThereIsBlockingOverlappingOpUpdate(){
+        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
+
+        Assertions.assertThrows(BookingOverlappingException.class, () ->{
+            validation.checkOverlappingPeriod(1L, 1L, period);
+        });
+
+        verify(blockingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenThereIsBookingOverlappingOnUpdate(){
+        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
+
+        Assertions.assertThrows(BookingOverlappingException.class, () ->{
+            validation.checkOverlappingPeriod(1L, 1L, period);
+        });
+
+        verify(bookingRepository).checkOverlapping(any(), any(), any());
     }
 }

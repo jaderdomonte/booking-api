@@ -20,25 +20,42 @@ public class OverlappingValidation {
     private final BlockingRepository blockingRepository;
 
     public void checkOverlappingPeriod(Long propertyId, BookingPeriod period) {
-        checkOverllapingBlocking(propertyId, period);
-        checkOverllapingBooking(propertyId, period);
+        checkOverlappingBlocking(propertyId, period);
+        checkOverlappingBooking(propertyId, period);
     }
 
-    private void checkOverllapingBlocking(Long propertyId, BookingPeriod period) {
+    private void checkOverlappingBlocking(Long propertyId, BookingPeriod period) {
         int overlappingBlockingsCount = blockingRepository.checkOverlapping(propertyId, period);
-//        List<BlockingEntity> blockingEntities = blockingRepository.checkOverlappingBlockings(checkIn, checkOut);
 
-        if (overlappingBlockingsCount > 0) {
-            throw new BookingOverlappingException("This Property is already blocked in this period!");
-        }
+        checkOverlappingCount(overlappingBlockingsCount, "This Property is already blocked in this period!");
     }
 
-    private void checkOverllapingBooking(Long propertyId, BookingPeriod period) {
+    private void checkOverlappingBooking(Long propertyId, BookingPeriod period) {
         int overlappingBookingCount = bookingRepository.checkOverlapping(propertyId, period);
-//        List<BookingEntity> bookingEntities = bookingRepository.checkOverlappingBookings(checkIn, checkOut);
 
-        if (overlappingBookingCount > 0) {
-            throw new BookingOverlappingException("This Property is already booked in this period!");
+        checkOverlappingCount(overlappingBookingCount, "This Property is already booked in this period!");
+    }
+
+    public void checkOverlappingPeriod(Long id, Long propertyId, BookingPeriod period) {
+        checkOverlappingBlocking(id, propertyId, period);
+        checkOverlappingBooking(id, propertyId, period);
+    }
+
+    private void checkOverlappingBlocking(Long id, Long propertyId, BookingPeriod period) {
+        int overlappingBlockingsCount = blockingRepository.checkOverlapping(id, propertyId, period);
+
+        checkOverlappingCount(overlappingBlockingsCount, "This Property is already blocked in this period!");
+    }
+
+    private void checkOverlappingBooking(Long id, Long propertyId, BookingPeriod period) {
+        int overlappingBookingCount = bookingRepository.checkOverlapping(id, propertyId, period);
+
+        checkOverlappingCount(overlappingBookingCount, "This Property is already booked in this period!");
+    }
+
+    private void checkOverlappingCount(int overlappingCount, String s) {
+        if (overlappingCount > 0) {
+            throw new BookingOverlappingException(s);
         }
     }
 }

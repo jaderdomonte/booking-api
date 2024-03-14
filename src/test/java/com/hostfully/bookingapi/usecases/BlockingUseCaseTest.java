@@ -132,7 +132,7 @@ class BlockingUseCaseTest {
         BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
 
         when(blockingRepository.save(any())).thenReturn(entity);
-        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         when(blockingRepository.findById(any())).thenReturn(Optional.of(entity));
 
         useCase.updateBlocking(1L, periodDto);
@@ -140,7 +140,7 @@ class BlockingUseCaseTest {
         assertTrue(entity.getPeriod().getCheckIn().isEqual(periodDto.checkIn()));
         assertTrue(entity.getPeriod().getCheckOut().isEqual(periodDto.checkOut()));
 
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         verify(blockingRepository).save(any());
         verify(blockingRepository).findById(any());
     }
@@ -158,13 +158,13 @@ class BlockingUseCaseTest {
         BlockingEntity entity = BlockingEntity.builder().period(period).property(propertyEntity).build();
 
         when(blockingRepository.findById(any())).thenReturn(Optional.of(entity));
-        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
 
         assertThrows(BookingOverlappingException.class, () -> {
             useCase.updateBlocking(1L, periodDto);
         });
 
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         verify(blockingRepository).findById(any());
         verify(blockingRepository, never()).save(any());
     }
@@ -181,7 +181,7 @@ class BlockingUseCaseTest {
             useCase.updateBlocking(1L, periodDto);
         });
 
-        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any(), any());
         verify(blockingRepository, never()).save(any());
     }
 }

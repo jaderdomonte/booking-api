@@ -36,8 +36,7 @@ public class BookingUseCase {
 
     public Booking getBookingById(Long id){
         LOG.info("Starting get Booking {}", id);
-        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
-//        BookingEntity entity = bookingRepository.findByIdAndStatusId(id, BookingStatusEnum.CONFIRMED.getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id: " + id));
+        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
         LOG.info("Returned Booking {}", id);
         return bookingEntityDomainMapper.toDomain(entity);
     }
@@ -53,8 +52,7 @@ public class BookingUseCase {
         LOG.info("Starting creating Booking");
         BookingEntity entity = bookingEntityDomainMapper.toEntity(domain);
 
-        // TODO: colocar esse cenário nos testes
-        propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Property with id: " + entity.getProperty().getId()));
+        propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no Property with id: " + entity.getProperty().getId()));
 
         // TODO: validar se a propriedade não está alugada ou bloqueada nesse período
         overlappingValidation.checkOverlappingPeriod(domain.getProperty().getId(), entity.getPeriod());
@@ -64,22 +62,22 @@ public class BookingUseCase {
 
     public void deleteBooking(Long id){
         LOG.info("Starting delete Booking {}", id);
-        BookingEntity bookingEntity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
+        BookingEntity bookingEntity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
         bookingRepository.delete(bookingEntity);
         LOG.info("Booking {} deleted", id);
     }
 
+    // TODO: tem problema pois está apontando overlapping para o mesmo booking
     public void updateBooking(Long id, Booking booking){
         LOG.info("Starting updating Booking {}", id);
-        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
-        GuestEntity guestEntity = guestRepository.findById(booking.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Guest with id " + booking.getGuest().getId()));
+        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
+        GuestEntity guestEntity = guestRepository.findById(booking.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no  Guest with id " + booking.getGuest().getId()));
 
         entity.getPeriod().setCheckIn(booking.getPeriod().getCheckIn());
         entity.getPeriod().setCheckOut(booking.getPeriod().getCheckOut());
         entity.setGuest(guestEntity);
 
-        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
-        overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
 
         bookingRepository.save(entity);
         LOG.info("Booking {} updated", id);
@@ -88,7 +86,7 @@ public class BookingUseCase {
     @Transactional
     public void cancelBooking(Long id){
         LOG.info("Starting cancelling Booking {}", id);
-        bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
+        bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
         bookingRepository.changeBookingStatus(id, BookingStatusEnum.CANCELED.getId());
         LOG.info("Booking {} canceled", id);
     }
@@ -96,9 +94,8 @@ public class BookingUseCase {
     @Transactional
     public void activateBooking(Long id){
         LOG.info("Starting activate Booking {}", id);
-        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("It does not exists a Booking with id " + id));
+        BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
 
-        // TODO: validar se a propriedade não está alugada ou bloqueada nesse período. Considerar o status do Booking = 1
         overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
         bookingRepository.changeBookingStatus(id, BookingStatusEnum.CONFIRMED.getId());
         LOG.info("Booking {} activated", id);
