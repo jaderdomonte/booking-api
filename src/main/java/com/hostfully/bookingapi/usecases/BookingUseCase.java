@@ -56,7 +56,7 @@ public class BookingUseCase {
         guestRepository.findById(entity.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no  Guest with id " + entity.getGuest().getId()));
         propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no Property with id: " + entity.getProperty().getId()));
 
-        overlappingValidation.checkOverlappingBooking(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getProperty().getId(), entity.getPeriod());
         overlappingValidation.checkOverlappingBlocking(entity.getProperty().getId(), entity.getPeriod());
 
         bookingRepository.save(entity);

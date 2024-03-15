@@ -106,7 +106,7 @@ class BookingUseCaseTest {
     @Test
     void shouldCreateBooking(){
         when(mapper.toEntity(any())).thenReturn(entity);
-        doNothing().when(overlappingValidation).checkOverlappingBooking(any(), any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingBooking(any(), any());
         doNothing().when(overlappingValidation).checkOverlappingBlocking(any(), any());
         when(bookingRepository.save(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
@@ -114,7 +114,7 @@ class BookingUseCaseTest {
 
         useCase.createBooking(domain);
 
-        verify(overlappingValidation).checkOverlappingBooking(any(), any(), any());
+        verify(overlappingValidation).checkOverlappingBooking(any(), any());
         verify(overlappingValidation).checkOverlappingBlocking(any(), any());
         verify(bookingRepository).save(any());
     }
@@ -124,13 +124,13 @@ class BookingUseCaseTest {
         when(mapper.toEntity(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
         when(guestRepository.findById(any())).thenReturn(Optional.of(GuestEntity.builder().id(2L).build()));
-        doThrow(new PeriodOverlappingException()).when(overlappingValidation).checkOverlappingBooking(any(), any(), any());
+        doThrow(new PeriodOverlappingException()).when(overlappingValidation).checkOverlappingBooking(any(), any());
 
         assertThrows(PeriodOverlappingException.class, () -> {
             useCase.createBooking(domain);
         });
 
-        verify(overlappingValidation, only()).checkOverlappingBooking(any(), any(), any());
+        verify(overlappingValidation, only()).checkOverlappingBooking(any(), any());
         verify(propertyRepository, only()).findById(any());
         verify(guestRepository, never()).save(any());
         verify(bookingRepository, never()).save(any());
@@ -146,7 +146,7 @@ class BookingUseCaseTest {
             useCase.createBooking(domain);
         });
 
-        verify(overlappingValidation, never()).checkOverlappingBooking(any(), any(), any());
+        verify(overlappingValidation, never()).checkOverlappingBooking(any(), any());
         verify(bookingRepository, never()).save(any());
     }
 
