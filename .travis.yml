@@ -2,6 +2,9 @@ language: java
 jdk:
   - openJDK17
 sudo: false
+script: ./mvnw clean install
+notifications:
+  email: jaderdomonte@gmail.com
 cache:
   directories:
     - $HOME/.m2
