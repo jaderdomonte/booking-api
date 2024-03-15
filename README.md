@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml/badge.svg?branch=main&event=push)](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml)
+
 # Hostfully - Test Review - Backend
 ## Booking RESTful Java API
 Booking API is a simple RESTful API for managing bookings and blockings in a property. 
