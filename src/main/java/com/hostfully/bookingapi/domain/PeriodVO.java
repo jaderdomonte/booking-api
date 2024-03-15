@@ -1,11 +1,12 @@
 package com.hostfully.bookingapi.domain;
 
+import com.hostfully.bookingapi.domain.validation.DomainValidation;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
-public class PeriodVO implements ValidatedDomain {
+public class PeriodVO implements DomainValidation {
 
     private LocalDate checkIn;
 

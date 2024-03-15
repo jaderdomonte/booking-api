@@ -1,11 +1,12 @@
 package com.hostfully.bookingapi.domain;
 
+import com.hostfully.bookingapi.domain.validation.DomainValidation;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Booking implements ValidatedDomain {
+public class Booking implements DomainValidation {
 
     private Long id;
 

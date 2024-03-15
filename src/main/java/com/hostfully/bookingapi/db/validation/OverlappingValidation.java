@@ -5,15 +5,11 @@ import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.exceptions.PeriodOverlappingException;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class OverlappingValidation {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OverlappingValidation.class);
 
     private final BookingRepository bookingRepository;
 
