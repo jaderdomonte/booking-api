@@ -10,6 +10,7 @@ import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.*;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
+import com.hostfully.bookingapi.web.request.BookingFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,11 +71,11 @@ class BookingUseCaseTest {
     }
 
     @Test
-    void shouldReturnAllBookings(){
-        when(bookingRepository.findAll()).thenReturn(asList(BookingEntity.builder().build()));
+    void shouldReturnBookingsByFilter(){
+        when(bookingRepository.findByFilter(any())).thenReturn(asList(BookingEntity.builder().build()));
         when(mapper.toDomain(any())).thenReturn(domain);
 
-        List<Booking> allBookings = useCase.getAllBookings();
+        List<Booking> allBookings = useCase.getBookingsByFilter(new BookingFilter(1L, 1L));
 
         assertEquals(1, allBookings.size());
     }
@@ -255,13 +256,13 @@ class BookingUseCaseTest {
     @Test
     void shouldActivateBooking(){
         when(bookingRepository.findById(any())).thenReturn(Optional.of(entity));
-        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         doNothing().when(bookingRepository).changeBookingStatus(any(), any());
 
         useCase.activateBooking(1L);
 
         verify(bookingRepository).findById(any());
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         verify(bookingRepository).changeBookingStatus(any(), any());
     }
 
@@ -274,21 +275,21 @@ class BookingUseCaseTest {
         });
 
         verify(bookingRepository).findById(any());
-        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any(), any());
         verify(bookingRepository, never()).changeBookingStatus(any(), any());
     }
 
     @Test
     void shouldThrowExceptionWhenThereIsOverlappingPeriodOnActivate() {
         when(bookingRepository.findById(any())).thenReturn(Optional.of(entity));
-        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
 
         assertThrows(BookingOverlappingException.class, () -> {
             useCase.activateBooking(1L);
         });
 
         verify(bookingRepository).findById(any());
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
         verify(bookingRepository, never()).changeBookingStatus(any(), any());
     }
 }

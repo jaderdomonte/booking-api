@@ -21,7 +21,35 @@ Or skip steps 2 and 3 and import the project into your IDE and run it.
 
 4. Access: http://localhost:4000/swagger-ui/index.html#/
 
-## Endpoints
+## Tecnology
+- Java 17
+- Maven
+- SpringBoot
+- Spring Data JPA
+- Spring Validation
+- Spring Web
+- H2 database
+- Lombok
+- Junit
+- Mockito
+ 
+## Features
+
+Bookings
+   - Create Booking.
+   - Get a Booking by id.
+   - Get Booking by filter.
+   - Update Booking.
+   - Delete Booking.
+   - Cancel Booking.
+   - Activate Booking.
+
+Blockings
+   - Create Blocking.
+   - Get Blockings by filter.
+   - Update Blocking.
+   - Delete Blocking.
+
 
 
 

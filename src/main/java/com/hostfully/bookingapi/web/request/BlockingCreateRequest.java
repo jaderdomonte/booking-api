@@ -4,5 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record BlockingCreateRequest (@NotNull Long propertyId, @NotNull LocalDate checkIn, @NotNull LocalDate checkOut) {
+public record BlockingCreateRequest (@NotNull Long propertyId,
+                                     @NotNull LocalDate checkIn,
+                                     @NotNull LocalDate checkOut) {
 }

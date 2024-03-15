@@ -63,11 +63,13 @@ class BookingControllerTest {
     }
 
     @Test
-    void shouldReturnAllBookingsAndStatus200() throws Exception {
-        when(useCase.getAllBookings()).thenReturn(Arrays.asList(domain));
+    void shouldReturnBookingsByFilterAndStatus200() throws Exception {
+        when(useCase.getBookingsByFilter(any())).thenReturn(Arrays.asList(domain));
         when(mapper.fromDomainToResponse(any())).thenReturn(response);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/bookings"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/bookings")
+                                            .param("propertyId", "1")
+                                            .param("guestId", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)));
     }

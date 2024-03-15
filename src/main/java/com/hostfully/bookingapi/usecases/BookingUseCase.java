@@ -10,6 +10,7 @@ import com.hostfully.bookingapi.db.repository.PropertyRepository;
 import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Booking;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
+import com.hostfully.bookingapi.web.request.BookingFilter;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +42,11 @@ public class BookingUseCase {
         return bookingEntityDomainMapper.toDomain(entity);
     }
 
-    public List<Booking> getAllBookings(){
-        LOG.info("Starting get all Bookings");
-        List<BookingEntity> allBookings = bookingRepository.findAll();
-        LOG.info("Returned {} Bookings", allBookings.size());
-        return allBookings.stream().map(booking -> bookingEntityDomainMapper.toDomain(booking)).toList();
+    public List<Booking> getBookingsByFilter(BookingFilter filter){
+        LOG.info("Starting get Bookings by filter");
+        List<BookingEntity> byFilter = bookingRepository.findByFilter(filter);
+        LOG.info("Returned {} Bookings", byFilter.size());
+        return byFilter.stream().map(booking -> bookingEntityDomainMapper.toDomain(booking)).toList();
     }
 
     public void createBooking(Booking domain){
@@ -95,7 +96,7 @@ public class BookingUseCase {
         LOG.info("Starting activate Booking {}", id);
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
 
-        overlappingValidation.checkOverlappingPeriod(entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
         bookingRepository.changeBookingStatus(id, BookingStatusEnum.CONFIRMED.getId());
         LOG.info("Booking {} activated", id);
     }

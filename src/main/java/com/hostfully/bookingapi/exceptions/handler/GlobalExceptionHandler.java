@@ -5,6 +5,7 @@ import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -73,6 +74,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DomainObjectValidationException.class)
     ProblemDetail handlerDomainObjectValidationException(DomainObjectValidationException exception){
+        LOG.error("Domain validation error: {}", exception.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        problemDetail.setTitle("Bad Request");
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    ProblemDetail handlerDataIntegrityViolationException(DataIntegrityViolationException exception){
         LOG.error("Domain validation error: {}", exception.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());

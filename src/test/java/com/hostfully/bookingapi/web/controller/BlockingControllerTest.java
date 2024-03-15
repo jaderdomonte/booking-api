@@ -57,7 +57,7 @@ class BlockingControllerTest {
         BookingPeriodDto bookingPeriodDto = new BookingPeriodDto(LocalDate.now(), LocalDate.now().plusDays(10));
         BlockingResponse blockingResponse = new BlockingResponse(1L, propertyDto, bookingPeriodDto);
 
-        when(useCase.getAllBlockings()).thenReturn(Arrays.asList(domain));
+        when(useCase.getBlockingsByFilter(any())).thenReturn(Arrays.asList(domain));
         when(mapper.fromDomainToResponse(any())).thenReturn(blockingResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/blockings"))

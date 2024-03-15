@@ -29,9 +29,9 @@ public class BlockingUseCase {
 
     private final BlockingEntityDomainMapper blockingEntityDomainMapper;
 
-    public List<Blocking> getAllBlockings(){
-        LOG.info("Starting get all Blockings");
-        List<BlockingEntity> allBlockings = blockingRepository.findAll();
+    public List<Blocking> getBlockingsByFilter(Long propertyId){
+        LOG.info("Starting get Blockings by filter");
+        List<BlockingEntity> allBlockings = blockingRepository.findByFilter(propertyId);
         LOG.info("Returned {} Blockings", allBlockings.size());
         return allBlockings.stream().map(blocking -> blockingEntityDomainMapper.toDomain(blocking)).toList();
     }

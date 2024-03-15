@@ -4,9 +4,11 @@ import com.hostfully.bookingapi.domain.Booking;
 import com.hostfully.bookingapi.usecases.BookingUseCase;
 import com.hostfully.bookingapi.web.mapper.BookingDtoDomainMapper;
 import com.hostfully.bookingapi.web.request.BookingCreateRequest;
+import com.hostfully.bookingapi.web.request.BookingFilter;
 import com.hostfully.bookingapi.web.request.BookingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BookingResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,13 +34,14 @@ public class BookingController {
 
     private final BookingDtoDomainMapper mapper;
 
-    @Operation(summary = "Get all Bookings", description = "Returns all Bookings")
+    @Operation(summary = "Get Bookings by filter", description = "Returns Bookings by filter")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved")
     @GetMapping
-    public ResponseEntity<List<BookingResponse>> getAllBookings(){
-        LOG.info("Receiving a GET to return all Bookings");
+    public ResponseEntity<List<BookingResponse>> getAllBookings(@RequestParam(required = false) Long propertyId,
+                                                                @RequestParam(required = false) Long guestId){
+        LOG.info("Receiving a GET to return Bookings by filter");
 
-        List<Booking> allBookings = useCase.getAllBookings();
+        List<Booking> allBookings = useCase.getBookingsByFilter(new BookingFilter(propertyId, guestId));
         List<BookingResponse> responseBody = allBookings.stream().map(booking -> mapper.fromDomainToResponse(booking)).toList();
 
         return ResponseEntity.ok(responseBody);
@@ -50,7 +53,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<BookingResponse> getBookingById(@PathVariable Long id){
+    public ResponseEntity<BookingResponse> getBookingById(@PathVariable @Parameter(name = "id", description = "Booking id") Long id){
         LOG.info("Receiving a GET to return Booking with id {}", id);
 
         Booking booking = useCase.getBookingById(id);
@@ -82,7 +85,8 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Booking/Guest was not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBooking(@PathVariable Long id, @RequestBody @Valid BookingUpdateRequest request){
+    public ResponseEntity<Void> updateBooking(@PathVariable @Parameter(name = "id", description = "Booking id") Long id,
+                                              @RequestBody @Valid BookingUpdateRequest request){
         LOG.info("Receiving a PUT to update Booking with id {}", id);
 
         Booking booking = mapper.fromRequestToDomain(request);
@@ -97,7 +101,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
     })
     @PatchMapping("/cancel/{id}")
-    public ResponseEntity<Void> cancelBooking(@PathVariable Long id){
+    public ResponseEntity<Void> cancelBooking(@PathVariable @Parameter(name = "id", description = "Booking id") Long id){
         LOG.info("Receiving a PATCH to cancel Booking with id {}", id);
 
         useCase.cancelBooking(id);
@@ -112,7 +116,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
     })
     @PatchMapping("/activate/{id}")
-    public ResponseEntity<Void> activateBooking(@PathVariable Long id){
+    public ResponseEntity<Void> activateBooking(@PathVariable @Parameter(name = "id", description = "Booking id") Long id){
         LOG.info("Receiving a PATCH to activate Booking with id {}", id);
 
         useCase.activateBooking(id);
@@ -126,7 +130,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
+    public ResponseEntity<Void> deleteBooking(@PathVariable @Parameter(name = "id", description = "Booking id") Long id){
         LOG.info("Receiving a DELETE to delete Booking with id {}", id);
 
         useCase.deleteBooking(id);

@@ -65,11 +65,11 @@ class BlockingUseCaseTest {
     }
 
     @Test
-    void shouldReturnAllBlockings(){
-        when(blockingRepository.findAll()).thenReturn(asList(BlockingEntity.builder().build()));
+    void shouldReturnBlockingsByFilter(){
+        when(blockingRepository.findByFilter(any())).thenReturn(asList(BlockingEntity.builder().build()));
         when(mapper.toDomain(any())).thenReturn(domain);
 
-        List<Blocking> allBlockings = useCase.getAllBlockings();
+        List<Blocking> allBlockings = useCase.getBlockingsByFilter(1L);
 
         Assertions.assertEquals(1, allBlockings.size());
     }

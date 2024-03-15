@@ -8,6 +8,7 @@ import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
 import com.hostfully.bookingapi.web.request.BlockingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BlockingResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,12 +34,12 @@ public class BlockingController {
 
     private final BlockingDtoDomainMapper mapper;
 
-    @Operation(summary = "Get all Blockings", description = "Returns all Blockings")
+    @Operation(summary = "Get Blockings by filter", description = "Returns Blockings by filter")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved")
     @GetMapping
-    public ResponseEntity<List<BlockingResponse>> getAllBlockings(){
-        LOG.info("Receiving a GET to return all Blockings");
-        List<Blocking> blockingsDomain = useCase.getAllBlockings();
+    public ResponseEntity<List<BlockingResponse>> getAllBlockings(@RequestParam(required = false) Long propertyId){
+        LOG.info("Receiving a GET to return Blockings by filter");
+        List<Blocking> blockingsDomain = useCase.getBlockingsByFilter(propertyId);
         List<BlockingResponse> responseBody = blockingsDomain.stream().map(blocking -> mapper.fromDomainToResponse(blocking)).toList();
 
         return ResponseEntity.ok(responseBody);
@@ -66,7 +67,8 @@ public class BlockingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Blocking was not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBlocking(@PathVariable Long id, @Valid @RequestBody BlockingUpdateRequest request){
+    public ResponseEntity<Void> updateBlocking(@PathVariable @Parameter(name = "id", description = "Blocking id") Long id,
+                                               @Valid @RequestBody BlockingUpdateRequest request){
         LOG.info("Receiving a PUT to update Blocking with id {}", id);
         BookingPeriodDto bookingPeriod = mapper.fromRequestToDomain(request);
 
@@ -81,7 +83,7 @@ public class BlockingController {
             @ApiResponse(responseCode = "404", description = "Not found - The Blocking was not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBlocking(@PathVariable Long id){
+    public ResponseEntity<Void> deleteBlocking(@PathVariable @Parameter(name = "id", description = "Blocking id") Long id){
         LOG.info("Receiving a DELETE to delete Blocking with id {}", id);
         useCase.deleteBlocking(id);
 
