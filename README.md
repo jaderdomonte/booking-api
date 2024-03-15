@@ -66,3 +66,7 @@ Access http://localhost:4000/swagger-ui/index.html#/ to test all features and se
 - Jader Santos
 - email: jaderdomonte@gmail.com
 - Linkedin: www.linkedin.com/in/jaderdomonte
+
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
+https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml/badge.svg
