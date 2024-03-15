@@ -10,7 +10,7 @@ import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Blocking;
 import com.hostfully.bookingapi.domain.PeriodVO;
 import com.hostfully.bookingapi.domain.Property;
-import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
+import com.hostfully.bookingapi.exceptions.PeriodOverlappingException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import com.hostfully.bookingapi.web.dto.PeriodDto;
 import org.junit.jupiter.api.Assertions;
@@ -77,13 +77,15 @@ class BlockingUseCaseTest {
     @Test
     void shouldCreateBlocking(){
         when(mapper.toEntity(any())).thenReturn(entity);
-        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingBooking(any(), any());
         when(blockingRepository.save(any())).thenReturn(BlockingEntity.builder().build());
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
 
         useCase.createBlocking(domain);
 
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
+        verify(overlappingValidation).checkOverlappingBooking(any(), any());
         verify(blockingRepository).save(any());
         verify(propertyRepository).findById(any());
         verify(propertyRepository).findById(any());
@@ -93,13 +95,13 @@ class BlockingUseCaseTest {
     void shouldThrowExceptionWhenThereIsOverlappingPeriodOnCreate() {
         when(mapper.toEntity(any())).thenReturn(entity);
         when(propertyRepository.findById(any())).thenReturn(Optional.of(PropertyEntity.builder().build()));
-        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any());
+        doThrow(new PeriodOverlappingException()).when(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
 
-        assertThrows(BookingOverlappingException.class, () -> {
+        assertThrows(PeriodOverlappingException.class, () -> {
             useCase.createBlocking(domain);
         });
 
-        verify(overlappingValidation, only()).checkOverlappingPeriod(any(), any());
+        verify(overlappingValidation, only()).checkOverlappingBlocking(any(), any(), any());
         verify(blockingRepository, never()).save(any());
         verify(propertyRepository).findById(any());
     }
@@ -132,7 +134,8 @@ class BlockingUseCaseTest {
         PeriodDto periodDto = new PeriodDto(today, tomorrow);
 
         when(blockingRepository.save(any())).thenReturn(entity);
-        doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
+        doNothing().when(overlappingValidation).checkOverlappingBooking(any(), any());
         when(blockingRepository.findById(any())).thenReturn(Optional.of(entity));
 
         useCase.updateBlocking(1L, periodDto);
@@ -140,7 +143,8 @@ class BlockingUseCaseTest {
         assertTrue(entity.getPeriod().getCheckIn().isEqual(periodDto.checkIn()));
         assertTrue(entity.getPeriod().getCheckOut().isEqual(periodDto.checkOut()));
 
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
+        verify(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
+        verify(overlappingValidation).checkOverlappingBooking(any(), any());
         verify(blockingRepository).save(any());
         verify(blockingRepository).findById(any());
     }
@@ -158,13 +162,13 @@ class BlockingUseCaseTest {
         BlockingEntity entity = BlockingEntity.builder().period(period).property(propertyEntity).build();
 
         when(blockingRepository.findById(any())).thenReturn(Optional.of(entity));
-        doThrow(new BookingOverlappingException()).when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
+        doThrow(new PeriodOverlappingException()).when(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
 
-        assertThrows(BookingOverlappingException.class, () -> {
+        assertThrows(PeriodOverlappingException.class, () -> {
             useCase.updateBlocking(1L, periodDto);
         });
 
-        verify(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
+        verify(overlappingValidation).checkOverlappingBlocking(any(), any(), any());
         verify(blockingRepository).findById(any());
         verify(blockingRepository, never()).save(any());
     }
@@ -181,7 +185,7 @@ class BlockingUseCaseTest {
             useCase.updateBlocking(1L, periodDto);
         });
 
-        verify(overlappingValidation, never()).checkOverlappingPeriod(any(), any(), any());
+        verify(overlappingValidation, never()).checkOverlappingBlocking(any(), any(), any());
         verify(blockingRepository, never()).save(any());
     }
 }

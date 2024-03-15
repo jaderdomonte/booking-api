@@ -30,7 +30,7 @@ public class BlockingUseCase {
     private final BlockingEntityDomainMapper blockingEntityDomainMapper;
 
     public List<Blocking> getBlockingsByFilter(Long propertyId){
-        LOG.info("Starting get Blockings by filter");
+        LOG.info("Starting getting Blockings by filter");
         List<BlockingEntity> allBlockings = blockingRepository.findByFilter(propertyId);
         LOG.info("Returned {} Blockings", allBlockings.size());
         return allBlockings.stream().map(blocking -> blockingEntityDomainMapper.toDomain(blocking)).toList();
@@ -40,26 +40,30 @@ public class BlockingUseCase {
         LOG.info("Starting creating Blocking");
         BlockingEntity entity = blockingEntityDomainMapper.toEntity(blocking);
         propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no Property with id: " + entity.getProperty().getId()));
-        overlappingValidation.checkOverlappingPeriod(blocking.getProperty().getId(), entity.getPeriod());
+
+        overlappingValidation.checkOverlappingBlocking(blocking.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getProperty().getId(), entity.getPeriod());
+
         blockingRepository.save(entity);
         LOG.info("Blocking created");
     }
 
     public void deleteBlocking(Long id){
-        LOG.info("Starting delete Blocking {}", id);
-        BlockingEntity blockingEntity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Block with id: " + id));
+        LOG.info("Starting deleting Blocking {}", id);
+        BlockingEntity blockingEntity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Blocking with id: " + id));
         blockingRepository.delete(blockingEntity);
         LOG.info("Blocking {} deleted", id);
     }
 
     public void updateBlocking(Long id, PeriodDto period){
         LOG.info("Starting updating Blocking {}", id);
-        BlockingEntity entity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Block with id: " + id));
+        BlockingEntity entity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Blocking with id: " + id));
 
         entity.getPeriod().setCheckIn(period.checkIn());
         entity.getPeriod().setCheckOut(period.checkOut());
 
-        overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBlocking(id, entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getProperty().getId(), entity.getPeriod());
 
         blockingRepository.save(entity);
         LOG.info("Blocking {} updated", id);

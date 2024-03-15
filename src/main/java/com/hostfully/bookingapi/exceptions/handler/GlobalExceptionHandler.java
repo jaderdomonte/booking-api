@@ -1,6 +1,6 @@
 package com.hostfully.bookingapi.exceptions.handler;
 
-import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
+import com.hostfully.bookingapi.exceptions.PeriodOverlappingException;
 import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -62,8 +62,8 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(BookingOverlappingException.class)
-    ProblemDetail handlerBookingOverlappingException(BookingOverlappingException exception){
+    @ExceptionHandler(PeriodOverlappingException.class)
+    ProblemDetail handlerBookingOverlappingException(PeriodOverlappingException exception){
         LOG.error("Booking overllaping error: {}", exception.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());

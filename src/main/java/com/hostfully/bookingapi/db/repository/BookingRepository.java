@@ -17,7 +17,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
 
     @Query("FROM BookingEntity b " +
             "WHERE (:#{#filter.propertyId} IS NULL OR b.property.id = :#{#filter.propertyId}) " +
-            "AND (:#{#filter.guestId} IS NULL OR b.guest.id = :#{#filter.guestId})")
+            "AND (:#{#filter.guestId} IS NULL OR b.guest.id = :#{#filter.guestId}) " +
+            "ORDER BY b.property.id, b.period.checkIn")
     List<BookingEntity> findByFilter(@Param("filter") BookingFilter filter);
 
     @Modifying

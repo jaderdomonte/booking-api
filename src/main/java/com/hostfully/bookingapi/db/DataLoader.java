@@ -74,11 +74,10 @@ public class DataLoader implements CommandLineRunner {
 
         bookingRepository.save(BookingEntity.builder().guest(guest).property(propertyEntity).period(period).status(bookingStatusEntity).build());
 
-        GuestEntity guest2 = GuestEntity.builder().id(2L).build();
         Period period2 = Period.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         PropertyEntity propertyEntity2 = PropertyEntity.builder().id(2L).name("Beachside Home").build();
 
-        bookingRepository.save(BookingEntity.builder().guest(guest2).property(propertyEntity2).period(period2).status(bookingStatusEntity).build());
+        bookingRepository.save(BookingEntity.builder().guest(guest).property(propertyEntity2).period(period2).status(bookingStatusEntity).build());
     }
 
     private void createBlockings() {

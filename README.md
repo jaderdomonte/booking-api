@@ -1,4 +1,5 @@
 [![Java CI with Maven](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml/badge.svg?branch=main&event=push)](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml)
+[![Test Coverage](https://cdn.hackernoon.com/images/2hVuiN1gfbdO9OXUxjCttPNETq73-2022-08-08T22:19:48.257Z-cl6lbgrz6002p0as65v8sfgja)](https://github.com/jaderdomonte/booking-api/)
 
 # Hostfully - Test Review - Backend
 ## Booking RESTful Java API

@@ -36,14 +36,14 @@ public class BookingUseCase {
     private final BookingEntityDomainMapper bookingEntityDomainMapper;
 
     public Booking getBookingById(Long id){
-        LOG.info("Starting get Booking {}", id);
+        LOG.info("Starting getting Booking {}", id);
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
         LOG.info("Returned Booking {}", id);
         return bookingEntityDomainMapper.toDomain(entity);
     }
 
     public List<Booking> getBookingsByFilter(BookingFilter filter){
-        LOG.info("Starting get Bookings by filter");
+        LOG.info("Starting getting Bookings by filter");
         List<BookingEntity> byFilter = bookingRepository.findByFilter(filter);
         LOG.info("Returned {} Bookings", byFilter.size());
         return byFilter.stream().map(booking -> bookingEntityDomainMapper.toDomain(booking)).toList();
@@ -56,13 +56,15 @@ public class BookingUseCase {
         guestRepository.findById(entity.getGuest().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no  Guest with id " + entity.getGuest().getId()));
         propertyRepository.findById(entity.getProperty().getId()).orElseThrow(() -> new ResourceNotFoundException("There is no Property with id: " + entity.getProperty().getId()));
 
-        overlappingValidation.checkOverlappingPeriod(domain.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBlocking(entity.getProperty().getId(), entity.getPeriod());
+
         bookingRepository.save(entity);
         LOG.info("Booking created");
     }
 
     public void deleteBooking(Long id){
-        LOG.info("Starting delete Booking {}", id);
+        LOG.info("Starting deleting Booking {}", id);
         BookingEntity bookingEntity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
         bookingRepository.delete(bookingEntity);
         LOG.info("Booking {} deleted", id);
@@ -77,7 +79,8 @@ public class BookingUseCase {
         entity.getPeriod().setCheckOut(booking.getPeriod().getCheckOut());
         entity.setGuest(guestEntity);
 
-        overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBlocking(entity.getProperty().getId(), entity.getPeriod());
 
         bookingRepository.save(entity);
         LOG.info("Booking {} updated", id);
@@ -93,10 +96,12 @@ public class BookingUseCase {
 
     @Transactional
     public void activateBooking(Long id){
-        LOG.info("Starting activate Booking {}", id);
+        LOG.info("Starting activating Booking {}", id);
         BookingEntity entity = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Booking with id " + id));
 
-        overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBooking(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
+        overlappingValidation.checkOverlappingBlocking(entity.getProperty().getId(), entity.getPeriod());
+
         bookingRepository.changeBookingStatus(id, BookingStatusEnum.CONFIRMED.getId());
         LOG.info("Booking {} activated", id);
     }

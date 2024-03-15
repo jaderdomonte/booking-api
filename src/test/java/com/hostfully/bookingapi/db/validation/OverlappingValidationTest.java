@@ -3,7 +3,7 @@ package com.hostfully.bookingapi.db.validation;
 import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
-import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
+import com.hostfully.bookingapi.exceptions.PeriodOverlappingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,70 +39,88 @@ class OverlappingValidationTest {
     }
 
     @Test
-    void shouldCheckOverlappingPeriodSucess(){
-        when(bookingRepository.checkOverlapping(any(), any())).thenReturn(0);
+    void shouldCheckOverlappingBlockingSucessWithoutBlockingId(){
         when(blockingRepository.checkOverlapping(any(), any())).thenReturn(0);
 
-        validation.checkOverlappingPeriod(1L, period);
+        validation.checkOverlappingBlocking(1L, period);
 
-        assertDoesNotThrow(() -> BookingOverlappingException.class);
+        assertDoesNotThrow(() -> PeriodOverlappingException.class);
         verify(blockingRepository).checkOverlapping(any(), any());
-        verify(bookingRepository).checkOverlapping(any(), any());
     }
 
     @Test
-    void shouldThrowExceptionWhenThereIsBlockingOverlapping(){
+    void shouldThrowExceptionWhenThereIsBlockingOverlappingWithoutBlockingId(){
         when(blockingRepository.checkOverlapping(any(), any())).thenReturn(1);
 
-        Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(1L, period);
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBlocking(1L, period);
         });
 
         verify(blockingRepository).checkOverlapping(any(), any());
     }
 
     @Test
-    void shouldThrowExceptionWhenThereIsBookingOverlapping(){
+    void shouldCheckOverlappingBlockingSucessWithBlockingId(){
+        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(0);
+
+        validation.checkOverlappingBlocking(1L, 1L, period);
+
+        assertDoesNotThrow(() -> PeriodOverlappingException.class);
+        verify(blockingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenThereIsBlockingOverlappingWithBlockingId(){
+        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
+
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBlocking(1L, 1L, period);
+        });
+
+        verify(blockingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldCheckOverlappingBookingSucessWithBookingId(){
+        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
+
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBooking(1L, 1L, period);
+        });
+
+        verify(bookingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenThereIsBookingOverlappingWithBookingId(){
+        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
+
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBooking(1L, 1L, period);
+        });
+
+        verify(bookingRepository).checkOverlapping(any(), any(), any());
+    }
+
+    @Test
+    void shouldCheckOverlappingBookingSucessWithoutBookingId(){
         when(bookingRepository.checkOverlapping(any(), any())).thenReturn(1);
 
-        Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(1L, period);
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBooking(1L, period);
         });
 
         verify(bookingRepository).checkOverlapping(any(), any());
     }
 
     @Test
-    void shouldCheckOverlappingPeriodSucessOnUpdate(){
-        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(0);
-        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(0);
+    void shouldThrowExceptionWhenThereIsBookingOverlappingWithoutBookingId(){
+        when(bookingRepository.checkOverlapping(any(), any())).thenReturn(1);
 
-        validation.checkOverlappingPeriod(1L, 1L, period);
-
-        assertDoesNotThrow(() -> BookingOverlappingException.class);
-        verify(blockingRepository).checkOverlapping(any(), any(), any());
-        verify(bookingRepository).checkOverlapping(any(), any(), any());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenThereIsBlockingOverlappingOpUpdate(){
-        when(blockingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
-
-        Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(1L, 1L, period);
+        Assertions.assertThrows(PeriodOverlappingException.class, () ->{
+            validation.checkOverlappingBooking(1L, period);
         });
 
-        verify(blockingRepository).checkOverlapping(any(), any(), any());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenThereIsBookingOverlappingOnUpdate(){
-        when(bookingRepository.checkOverlapping(any(), any(), any())).thenReturn(1);
-
-        Assertions.assertThrows(BookingOverlappingException.class, () ->{
-            validation.checkOverlappingPeriod(1L, 1L, period);
-        });
-
-        verify(bookingRepository).checkOverlapping(any(), any(), any());
+        verify(bookingRepository).checkOverlapping(any(), any());
     }
 }
