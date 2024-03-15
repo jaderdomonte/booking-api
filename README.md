@@ -47,7 +47,7 @@ Layers:
 Bookings
    - Create Booking.
    - Get a Booking by id.
-   - Get Booking by filter.
+   - Get Bookings by filter.
    - Update Booking.
    - Delete Booking.
    - Cancel Booking.
@@ -59,11 +59,10 @@ Blockings
    - Update Blocking.
    - Delete Blocking.
 
+## Documentation
+Access http://localhost:4000/swagger-ui/index.html#/ to test all features and see full documentation.
+
 ## Author
 - Jader Santos
 - email: jaderdomonte@gmail.com
 - Linkedin: www.linkedin.com/in/jaderdomonte
-
-
-
-
