@@ -1,0 +1,4 @@
+language: java
+jdk:
+  - openJDK17
+sudo: false

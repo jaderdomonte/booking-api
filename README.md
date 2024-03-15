@@ -32,9 +32,18 @@ Or skip steps 2 and 3 and import the project into your IDE and run it.
 - Lombok
 - Junit
 - Mockito
- 
-## Features
 
+## Architecture description
+A object-oriented multilayered architecture.
+
+Layers:
+   - domain: business logic of the application.
+   - db: handler all the interactions with database.
+   - exceptions: handler all the exceptions launched by the application.
+   - usecases: implements the use cases of the application.
+   - web: implements the interactions with de web requisitions.
+
+## Features
 Bookings
    - Create Booking.
    - Get a Booking by id.
