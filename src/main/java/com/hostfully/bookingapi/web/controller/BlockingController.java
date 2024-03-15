@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/blockings")
 @AllArgsConstructor
 @Tag(name = "Blockings")
-public class BlockingController {
+public class BlockingControlle {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlockingController.class);
 
