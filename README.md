@@ -55,7 +55,7 @@ Bookings
    - Cancel Booking.
    - Activate Booking.
 Obs: Assuming that Check in must starts after 2 p.m and CheckOut must finishing before 11 a.m. This rules it will be valid to Bookings and Blockings. That is why it is possible to have the scenarios below to the same property:
-     1. A Blocking Check in 2024-03-15 and Check out 2024-03-21
+     1. A Blocking Check in *2024-03-15* and Check out 2024-03-21
      2. A Booking Check in 2024-03-21 and Check out 2024-03-25
      3. A Booking Check in 2024-03-25 and Check out 2024-03-28
      4. A Blocking Check in 2024-03-28 and Check out 2024-04-05
