@@ -59,6 +59,11 @@ Blockings
    - Update Blocking.
    - Delete Blocking.
 
+## Author
+- Jader Santos
+- email: jaderdomonte@gmail.com
+- Linkedin: www.linkedin.com/in/jaderdomonte
+
 
 
 
