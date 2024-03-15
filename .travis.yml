@@ -2,3 +2,6 @@ language: java
 jdk:
   - openJDK17
 sudo: false
+cache:
+  directories:
+    - $HOME/.m2
