@@ -1,3 +1,5 @@
+![example workflow](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml/badge.svg)
+
 # Hostfully - Test Review - Backend
 ## Booking RESTful Java API
 Booking API is a simple RESTful API for managing bookings and blockings in a property. 
@@ -66,5 +68,3 @@ Access http://localhost:4000/swagger-ui/index.html#/ to test all features and se
 - Jader Santos
 - email: jaderdomonte@gmail.com
 - Linkedin: www.linkedin.com/in/jaderdomonte
-
-![example workflow](https://github.com/jaderdomonte/booking-api/actions/workflows/maven.yml/badge.svg)
