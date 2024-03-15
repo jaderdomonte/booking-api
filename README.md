@@ -61,7 +61,7 @@ Blockings
    - Update Blocking.
    - Delete Blocking.
 
-Obs: Assuming that Check in must starts after **2 p.m** and CheckOut must finishing before **11 a.m.** This rules it will be valid to Bookings and Blockings. That is why it is possible to have the scenarios below to the same property:
+Obs: Assuming that Check in must start after **2pm** and CheckOut must end before **11am**. This rule will be valid for Bookings and Blockings. Therefore, it is possible to have the following scenarios for the same property:
 1. A Blocking Check in **2024-03-15** and Check out **2024-03-21**
 2. A Booking Check in **2024-03-21** and Check out **2024-03-25**
 3. A Booking Check in **2024-03-25** and Check out **2024-03-28**
