@@ -36,14 +36,14 @@ Or skip steps 2 and 3 and import the project into your IDE and run it.
 - Mockito
 
 ## Architecture description
-A object-oriented multilayered architecture.
+A object-oriented multilayered architecture mixed with some DDD concepts as well.
 
 Layers:
-   - domain: business logic of the application.
-   - db: handler all the interactions with database.
+   - domain: business logic class of the application.
+   - db: handler all the interactions with the database.
    - exceptions: handler all the exceptions launched by the application.
    - usecases: implements the use cases of the application.
-   - web: implements the interactions with de web requisitions.
+   - web: handler all the interactions with web requisitions.
 
 ## Features
 Bookings
