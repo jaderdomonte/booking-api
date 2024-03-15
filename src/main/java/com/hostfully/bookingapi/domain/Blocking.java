@@ -11,15 +11,15 @@ public class Blocking implements ValidatedDomain {
 
     private Property property;
 
-    private BookingPeriodVO period;
+    private PeriodVO period;
 
-    public Blocking(Long id, Property property, BookingPeriodVO period) {
+    public Blocking(Long id, Property property, PeriodVO period) {
         this(property, period);
         this.id = id;
         validate();
     }
 
-    public Blocking(Property property, BookingPeriodVO period) {
+    public Blocking(Property property, PeriodVO period) {
         this.property = property;
         this.period = period;
         validate();

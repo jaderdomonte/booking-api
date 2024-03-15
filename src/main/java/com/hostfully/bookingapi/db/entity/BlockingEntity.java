@@ -23,5 +23,5 @@ public class BlockingEntity {
     private PropertyEntity property;
 
     @Embedded
-    private BookingPeriod period;
+    private Period period;
 }

@@ -7,7 +7,7 @@ import com.hostfully.bookingapi.db.repository.PropertyRepository;
 import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Blocking;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,12 +52,12 @@ public class BlockingUseCase {
         LOG.info("Blocking {} deleted", id);
     }
 
-    public void updateBlocking(Long id, BookingPeriodDto bookingPeriod){
+    public void updateBlocking(Long id, PeriodDto period){
         LOG.info("Starting updating Blocking {}", id);
         BlockingEntity entity = blockingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Block with id: " + id));
 
-        entity.getPeriod().setCheckIn(bookingPeriod.checkIn());
-        entity.getPeriod().setCheckOut(bookingPeriod.checkOut());
+        entity.getPeriod().setCheckIn(period.checkIn());
+        entity.getPeriod().setCheckOut(period.checkOut());
 
         overlappingValidation.checkOverlappingPeriod(entity.getId(), entity.getProperty().getId(), entity.getPeriod());
 

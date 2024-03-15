@@ -2,7 +2,7 @@ package com.hostfully.bookingapi.web.controller;
 
 import com.hostfully.bookingapi.domain.Blocking;
 import com.hostfully.bookingapi.usecases.BlockingUseCase;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import com.hostfully.bookingapi.web.mapper.BlockingDtoDomainMapper;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
 import com.hostfully.bookingapi.web.request.BlockingUpdateRequest;
@@ -70,9 +70,9 @@ public class BlockingController {
     public ResponseEntity<Void> updateBlocking(@PathVariable @Parameter(name = "id", description = "Blocking id") Long id,
                                                @Valid @RequestBody BlockingUpdateRequest request){
         LOG.info("Receiving a PUT to update Blocking with id {}", id);
-        BookingPeriodDto bookingPeriod = mapper.fromRequestToDomain(request);
+        PeriodDto periodDto = mapper.fromRequestToDomain(request);
 
-        useCase.updateBlocking(id, bookingPeriod);
+        useCase.updateBlocking(id, periodDto);
 
         return ResponseEntity.noContent().build();
     }

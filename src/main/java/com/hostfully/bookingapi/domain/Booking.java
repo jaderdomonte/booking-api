@@ -11,13 +11,13 @@ public class Booking implements ValidatedDomain {
 
     private Guest guest;
 
-    private BookingPeriodVO period;
+    private PeriodVO period;
 
     private Property property;
 
     private BookingStatusVO status;
 
-    public Booking(Long id, Guest guest, Property property, BookingPeriodVO period, BookingStatusVO status) {
+    public Booking(Long id, Guest guest, Property property, PeriodVO period, BookingStatusVO status) {
         this.id = id;
         this.guest = guest;
         this.property = property;
@@ -26,7 +26,7 @@ public class Booking implements ValidatedDomain {
         validate();
     }
 
-    public Booking(Guest guest, Property property, BookingPeriodVO period, BookingStatusVO status) {
+    public Booking(Guest guest, Property property, PeriodVO period, BookingStatusVO status) {
         this.guest = guest;
         this.property = property;
         this.period = period;
@@ -34,7 +34,7 @@ public class Booking implements ValidatedDomain {
         validate();
     }
 
-    public Booking(Guest guest, BookingPeriodVO period) {
+    public Booking(Guest guest, PeriodVO period) {
         this.guest = guest;
         this.period = period;
         validateGuestAndPeriod();

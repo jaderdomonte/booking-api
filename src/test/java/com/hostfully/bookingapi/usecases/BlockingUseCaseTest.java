@@ -1,18 +1,18 @@
 package com.hostfully.bookingapi.usecases;
 
 import com.hostfully.bookingapi.db.entity.BlockingEntity;
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.db.entity.PropertyEntity;
 import com.hostfully.bookingapi.db.mapper.BlockingEntityDomainMapper;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.PropertyRepository;
 import com.hostfully.bookingapi.db.validation.OverlappingValidation;
 import com.hostfully.bookingapi.domain.Blocking;
-import com.hostfully.bookingapi.domain.BookingPeriodVO;
+import com.hostfully.bookingapi.domain.PeriodVO;
 import com.hostfully.bookingapi.domain.Property;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
 import com.hostfully.bookingapi.exceptions.ResourceNotFoundException;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,12 +56,12 @@ class BlockingUseCaseTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-        domain = new Blocking(property, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        domain = new Blocking(property, periodVO);
 
-        BookingPeriod bookingPeriodEntity = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
+        Period periodEntity = Period.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
         PropertyEntity propertyEntity = PropertyEntity.builder().id(domain.getProperty().getId()).name(domain.getProperty().getName()).build();
-        entity = BlockingEntity.builder().property(propertyEntity).period(bookingPeriodEntity).build();
+        entity = BlockingEntity.builder().property(propertyEntity).period(periodEntity).build();
     }
 
     @Test
@@ -129,7 +129,7 @@ class BlockingUseCaseTest {
     void shouldUpdateBlocking(){
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
+        PeriodDto periodDto = new PeriodDto(today, tomorrow);
 
         when(blockingRepository.save(any())).thenReturn(entity);
         doNothing().when(overlappingValidation).checkOverlappingPeriod(any(), any(), any());
@@ -152,8 +152,8 @@ class BlockingUseCaseTest {
         LocalDate nextWeek = LocalDate.now().plusDays(7);
         LocalDate nextWeekPlusOne = LocalDate.now().plusDays(8);
 
-        BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
-        BookingPeriod period = BookingPeriod.builder().checkIn(nextWeek).checkOut(nextWeekPlusOne).build();
+        PeriodDto periodDto = new PeriodDto(today, tomorrow);
+        Period period = Period.builder().checkIn(nextWeek).checkOut(nextWeekPlusOne).build();
         PropertyEntity propertyEntity = PropertyEntity.builder().id(1L).build();
         BlockingEntity entity = BlockingEntity.builder().period(period).property(propertyEntity).build();
 
@@ -173,7 +173,7 @@ class BlockingUseCaseTest {
     void shouldThrowsExceptionWhenResourceDoesNotExistsOnUpdate(){
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = LocalDate.now().plusDays(1);
-        BookingPeriodDto periodDto = new BookingPeriodDto(today, tomorrow);
+        PeriodDto periodDto = new PeriodDto(today, tomorrow);
 
         when(blockingRepository.findById(any())).thenThrow(new ResourceNotFoundException("Message"));
 

@@ -28,10 +28,10 @@ class BookingEntityDomainMapperTest {
         GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
         Guest guest = new Guest(1L, guestNameVO);
         Property property = new Property(1L, "Beach House");
-        PeriodVO bookingPeriod = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CONFIRMED.getId(), BookingStatusEnum.CONFIRMED.getDescription());
 
-        domain = new Booking(1L, guest, property, bookingPeriod, bookingStatusVO);
+        domain = new Booking(1L, guest, property, periodVO, bookingStatusVO);
 
         GuestEntity guestEntity = GuestEntity.builder().id(domain.getGuest().getId()).fullName(GuestName.builder().firstName("Brock").lastName("Purdy").build()) .build();
         Period periodEntity = Period.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();

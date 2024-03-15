@@ -1,10 +1,10 @@
 package com.hostfully.bookingapi.web.controller;
 
 import com.hostfully.bookingapi.domain.Blocking;
-import com.hostfully.bookingapi.domain.BookingPeriodVO;
+import com.hostfully.bookingapi.domain.PeriodVO;
 import com.hostfully.bookingapi.domain.Property;
 import com.hostfully.bookingapi.usecases.BlockingUseCase;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;
 import com.hostfully.bookingapi.web.mapper.BlockingDtoDomainMapper;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
@@ -47,15 +47,15 @@ class BlockingControllerTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-        domain = new Blocking(property, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        domain = new Blocking(property, periodVO);
     }
 
     @Test
     void shouldReturnAllBlockingsAndStatus200() throws Exception {
         PropertyDto propertyDto = new PropertyDto(1L, "Beach House");
-        BookingPeriodDto bookingPeriodDto = new BookingPeriodDto(LocalDate.now(), LocalDate.now().plusDays(10));
-        BlockingResponse blockingResponse = new BlockingResponse(1L, propertyDto, bookingPeriodDto);
+        PeriodDto periodDto = new PeriodDto(LocalDate.now(), LocalDate.now().plusDays(10));
+        BlockingResponse blockingResponse = new BlockingResponse(1L, propertyDto, periodDto);
 
         when(useCase.getBlockingsByFilter(any())).thenReturn(Arrays.asList(domain));
         when(mapper.fromDomainToResponse(any())).thenReturn(blockingResponse);
@@ -80,9 +80,9 @@ class BlockingControllerTest {
     @Test
     void shouldUpdateBlockingAndReturnStatus204() throws Exception {
         String request = "{\"checkIn\":\"2024-03-12T00:00\",\"checkOut\":\"2024-03-18T00:00\"}";
-        BookingPeriodDto bookingPeriodDto = new BookingPeriodDto(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodDto periodDto = new PeriodDto(LocalDate.now(), LocalDate.now().plusDays(10));
 
-        when(mapper.fromRequestToDomain(any(BlockingUpdateRequest.class))).thenReturn(bookingPeriodDto);
+        when(mapper.fromRequestToDomain(any(BlockingUpdateRequest.class))).thenReturn(periodDto);
         doNothing().when(useCase).createBlocking(any());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/blockings/1")

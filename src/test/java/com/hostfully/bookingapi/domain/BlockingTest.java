@@ -15,8 +15,8 @@ class BlockingTest {
     @Test
     void shouldThrowsExceptionIfCreateDomainObjectWithoutProperty() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-            new Blocking(null, bookingPeriod);
+            PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+            new Blocking(null, periodVO);
         });
 
         assertEquals("Property is required.", exception.getMessage());
@@ -42,8 +42,8 @@ class BlockingTest {
     @Test
     void shouldCreateDomainObjectWithRequiredFields() {
         Property property = new Property(1L);
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-        new Blocking(property, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        new Blocking(property, periodVO);
 
         assertDoesNotThrow(() -> DomainObjectValidationException.class);
     }

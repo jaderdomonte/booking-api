@@ -1,6 +1,6 @@
 package com.hostfully.bookingapi.db.validation;
 
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.db.repository.BlockingRepository;
 import com.hostfully.bookingapi.db.repository.BookingRepository;
 import com.hostfully.bookingapi.exceptions.BookingOverlappingException;
@@ -31,11 +31,11 @@ class OverlappingValidationTest {
     @Mock
     private BlockingRepository blockingRepository;
 
-    private BookingPeriod period;
+    private Period period;
 
     @BeforeEach
     void setUp(){
-        period = BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        period = Period.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
     }
 
     @Test

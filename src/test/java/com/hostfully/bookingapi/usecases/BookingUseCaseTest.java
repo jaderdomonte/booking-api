@@ -57,17 +57,17 @@ class BookingUseCaseTest {
         GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
         Guest guest = new Guest(1L, guestNameVO);
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-        domain = new Booking(1L, guest, property, bookingPeriod, bookingStatusVO);
+        domain = new Booking(1L, guest, property, periodVO, bookingStatusVO);
 
         GuestEntity guestEntity = GuestEntity.builder().id(domain.getGuest().getId()).build();
-        BookingPeriod bookingPeriodEntity = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
+        Period periodEntity = Period.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
         BookingStatusEntity bookingStatusEntity = BookingStatusEntity.builder().id(BookingStatusEnum.CONFIRMED.getId()).build();
         PropertyEntity propertyEntity = PropertyEntity.builder().id(domain.getProperty().getId()).name(domain.getProperty().getName()).build();
 
-        entity = BookingEntity.builder().guest(guestEntity).property(propertyEntity).period(bookingPeriodEntity).status(bookingStatusEntity).build();
+        entity = BookingEntity.builder().guest(guestEntity).property(propertyEntity).period(periodEntity).status(bookingStatusEntity).build();
     }
 
     @Test

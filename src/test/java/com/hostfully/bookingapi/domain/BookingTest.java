@@ -18,10 +18,10 @@ class BookingTest {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
             GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
             Property property = new Property(1L, "Beach House");
-            BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+            PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
             BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-            new Booking(1L, null, property, bookingPeriod, bookingStatusVO);
+            new Booking(1L, null, property, periodVO, bookingStatusVO);
         });
 
         assertEquals("Guest is required.", exception.getMessage());
@@ -46,10 +46,10 @@ class BookingTest {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
             GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
             Guest guest = new Guest(1L, guestNameVO);
-            BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+            PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
             BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-            new Booking(1L, guest, null, bookingPeriod, bookingStatusVO);
+            new Booking(1L, guest, null, periodVO, bookingStatusVO);
         });
 
         assertEquals("Property is required.", exception.getMessage());
@@ -61,9 +61,9 @@ class BookingTest {
             GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
             Property property = new Property(1L, "Beach House");
             Guest guest = new Guest(1L, guestNameVO);
-            BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+            PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
 
-            new Booking(1L, guest, property, bookingPeriod, null);
+            new Booking(1L, guest, property, periodVO, null);
         });
 
         assertEquals("Status is required.", exception.getMessage());
@@ -81,10 +81,10 @@ class BookingTest {
         GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
         Guest guest = new Guest(1L, guestNameVO);
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-        new Booking(1L, guest, property, bookingPeriod, bookingStatusVO);
+        new Booking(1L, guest, property, periodVO, bookingStatusVO);
 
         assertDoesNotThrow(() -> DomainObjectValidationException.class);
     }

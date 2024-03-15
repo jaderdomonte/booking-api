@@ -1,10 +1,10 @@
 package com.hostfully.bookingapi.db.mapper;
 
 import com.hostfully.bookingapi.db.entity.BlockingEntity;
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.db.entity.PropertyEntity;
 import com.hostfully.bookingapi.domain.Blocking;
-import com.hostfully.bookingapi.domain.BookingPeriodVO;
+import com.hostfully.bookingapi.domain.PeriodVO;
 import com.hostfully.bookingapi.domain.Property;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,12 +29,12 @@ class BlockingEntityDomainMapperTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-        domain = new Blocking(property, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        domain = new Blocking(property, periodVO);
 
-        BookingPeriod bookingPeriodEntity = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
+        Period periodEntity = Period.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
         PropertyEntity propertyEntity = PropertyEntity.builder().id(domain.getProperty().getId()).name(domain.getProperty().getName()).build();
-        entity = BlockingEntity.builder().property(propertyEntity).period(bookingPeriodEntity).build();
+        entity = BlockingEntity.builder().property(propertyEntity).period(periodEntity).build();
     }
 
     @Test

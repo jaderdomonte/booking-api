@@ -1,9 +1,9 @@
 package com.hostfully.bookingapi.web.mapper;
 
 import com.hostfully.bookingapi.domain.Blocking;
-import com.hostfully.bookingapi.domain.BookingPeriodVO;
+import com.hostfully.bookingapi.domain.PeriodVO;
 import com.hostfully.bookingapi.domain.Property;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import com.hostfully.bookingapi.web.request.BlockingCreateRequest;
 import com.hostfully.bookingapi.web.request.BlockingUpdateRequest;
 import com.hostfully.bookingapi.web.response.BlockingResponse;
@@ -28,8 +28,8 @@ class BlockingDtoDomainMapperTest {
     @BeforeEach
     void setUp(){
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
-        domain = new Blocking(property, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        domain = new Blocking(property, periodVO);
     }
 
     @Test
@@ -58,9 +58,9 @@ class BlockingDtoDomainMapperTest {
     void shouldMapFromUpdateRequestToDomain() {
         BlockingUpdateRequest request = new BlockingUpdateRequest(LocalDate.now(), LocalDate.now().plusDays(10));
 
-        BookingPeriodDto bookingPeriodDto = mapper.fromRequestToDomain(request);
+        PeriodDto periodDto = mapper.fromRequestToDomain(request);
 
-        assertEquals(request.checkIn(), bookingPeriodDto.checkIn());
-        assertEquals(request.checkOut(), bookingPeriodDto.checkOut());
+        assertEquals(request.checkIn(), periodDto.checkIn());
+        assertEquals(request.checkOut(), periodDto.checkOut());
     }
 }

@@ -10,20 +10,20 @@ public class BookingEntityDomainMapper {
 
     public BookingEntity toEntity(Booking domain){
         GuestEntity guest = GuestEntity.builder().id(domain.getGuest().getId()).build();
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
+        Period period = Period.builder().checkIn(domain.getPeriod().getCheckIn()).checkOut(domain.getPeriod().getCheckOut()).build();
         BookingStatusEntity bookingStatusEntity = BookingStatusEntity.builder().id(BookingStatusEnum.CONFIRMED.getId()).build();
         PropertyEntity propertyEntity = PropertyEntity.builder().id(domain.getProperty().getId()).name(domain.getProperty().getName()).build();
 
-        return BookingEntity.builder().guest(guest).property(propertyEntity).period(bookingPeriod).status(bookingStatusEntity).build();
+        return BookingEntity.builder().guest(guest).property(propertyEntity).period(period).status(bookingStatusEntity).build();
     }
 
     public Booking toDomain(BookingEntity entity){
         GuestNameVO guestNameVO = new GuestNameVO(entity.getGuest().getFullName().getFirstName(), entity.getGuest().getFullName().getLastName());
         Guest guest = new Guest(entity.getGuest().getId(), guestNameVO);
         Property property = new Property(entity.getProperty().getId(), entity.getProperty().getName());
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
+        PeriodVO periodVO = new PeriodVO(entity.getPeriod().getCheckIn(), entity.getPeriod().getCheckOut());
         BookingStatusVO bookingStatusVO = new BookingStatusVO(entity.getStatus().getId(), entity.getStatus().getDescription());
 
-        return new Booking(entity.getId(), guest, property, bookingPeriod, bookingStatusVO);
+        return new Booking(entity.getId(), guest, property, periodVO, bookingStatusVO);
     }
 }

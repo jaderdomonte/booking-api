@@ -2,7 +2,7 @@ package com.hostfully.bookingapi.web.mapper;
 
 import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.domain.*;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import com.hostfully.bookingapi.web.dto.GuestDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;
 import com.hostfully.bookingapi.web.request.BookingCreateRequest;
@@ -15,22 +15,22 @@ public class BookingDtoDomainMapper {
 
     public BookingResponse fromDomainToResponse(Booking domain){
         GuestDto guestDto = new GuestDto(domain.getGuest().getId(), domain.getGuest().getFullName().getFirstName(), domain.getGuest().getFullName().getLastName());
-        BookingPeriodDto bookingPeriodDto = new BookingPeriodDto(domain.getPeriod().getCheckIn(), domain.getPeriod().getCheckOut());
+        PeriodDto periodDto = new PeriodDto(domain.getPeriod().getCheckIn(), domain.getPeriod().getCheckOut());
         PropertyDto propertyDto = new PropertyDto(domain.getProperty().getId(), domain.getProperty().getName());
-        return new BookingResponse(domain.getId(), guestDto, propertyDto, bookingPeriodDto, domain.getStatus().getDescription());
+        return new BookingResponse(domain.getId(), guestDto, propertyDto, periodDto, domain.getStatus().getDescription());
     }
 
     public Booking fromRequestToDomain(BookingCreateRequest request){
         Guest guest = new Guest(request.guestId());
         Property property = new Property(request.propertyId());
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(request.checkIn(), request.checkOut());
+        PeriodVO periodVO = new PeriodVO(request.checkIn(), request.checkOut());
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CONFIRMED.getId(), BookingStatusEnum.CONFIRMED.getDescription());
-        return new Booking(guest, property, bookingPeriod, bookingStatusVO);
+        return new Booking(guest, property, periodVO, bookingStatusVO);
     }
 
     public Booking fromRequestToDomain(BookingUpdateRequest request){
         Guest guest = new Guest(request.guestId());
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(request.checkIn(), request.checkOut());
-        return new Booking(guest, bookingPeriod);
+        PeriodVO periodVO = new PeriodVO(request.checkIn(), request.checkOut());
+        return new Booking(guest, periodVO);
     }
 }

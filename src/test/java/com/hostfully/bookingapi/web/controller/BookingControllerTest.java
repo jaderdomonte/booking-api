@@ -3,7 +3,7 @@ package com.hostfully.bookingapi.web.controller;
 import com.hostfully.bookingapi.db.enumeration.BookingStatusEnum;
 import com.hostfully.bookingapi.domain.*;
 import com.hostfully.bookingapi.usecases.BookingUseCase;
-import com.hostfully.bookingapi.web.dto.BookingPeriodDto;
+import com.hostfully.bookingapi.web.dto.PeriodDto;
 import com.hostfully.bookingapi.web.dto.GuestDto;
 import com.hostfully.bookingapi.web.dto.PropertyDto;
 import com.hostfully.bookingapi.web.mapper.BookingDtoDomainMapper;
@@ -51,15 +51,15 @@ class BookingControllerTest {
         GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
         Guest guest = new Guest(1L, guestNameVO);
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-        domain = new Booking(1L, guest, property, bookingPeriod, bookingStatusVO);
+        domain = new Booking(1L, guest, property, periodVO, bookingStatusVO);
 
         GuestDto guestDto = new GuestDto(domain.getGuest().getId(), domain.getGuest().getFullName().getFirstName(), domain.getGuest().getFullName().getLastName());
-        BookingPeriodDto bookingPeriodDto = new BookingPeriodDto(domain.getPeriod().getCheckIn(), domain.getPeriod().getCheckOut());
+        PeriodDto periodDto = new PeriodDto(domain.getPeriod().getCheckIn(), domain.getPeriod().getCheckOut());
         PropertyDto propertyDto = new PropertyDto(domain.getProperty().getId(), domain.getProperty().getName());
-        response = new BookingResponse(domain.getId(), guestDto, propertyDto, bookingPeriodDto, domain.getStatus().getDescription());
+        response = new BookingResponse(domain.getId(), guestDto, propertyDto, periodDto, domain.getStatus().getDescription());
     }
 
     @Test

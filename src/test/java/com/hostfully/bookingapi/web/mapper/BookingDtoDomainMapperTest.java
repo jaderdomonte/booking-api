@@ -28,10 +28,10 @@ class BookingDtoDomainMapperTest {
         GuestNameVO guestNameVO = new GuestNameVO("Jordan", "Love");
         Guest guest = new Guest(1L, guestNameVO);
         Property property = new Property(1L, "Beach House");
-        BookingPeriodVO bookingPeriod = new BookingPeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
+        PeriodVO periodVO = new PeriodVO(LocalDate.now(), LocalDate.now().plusDays(10));
         BookingStatusVO bookingStatusVO = new BookingStatusVO(BookingStatusEnum.CANCELED.getId(), BookingStatusEnum.CANCELED.getDescription());
 
-        domain = new Booking(1L, guest, property, bookingPeriod, bookingStatusVO);
+        domain = new Booking(1L, guest, property, periodVO, bookingStatusVO);
     }
 
     @Test

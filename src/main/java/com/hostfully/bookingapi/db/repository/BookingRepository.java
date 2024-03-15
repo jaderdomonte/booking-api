@@ -1,7 +1,7 @@
 package com.hostfully.bookingapi.db.repository;
 
 import com.hostfully.bookingapi.db.entity.BookingEntity;
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.web.request.BookingFilter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -33,7 +33,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             ") " +
             "AND b.status.id = 1 " +
             "AND b.property.id = :propertyId")
-    int checkOverlapping(@Param("propertyId") Long propertyId, @Param("period") BookingPeriod period);
+    int checkOverlapping(@Param("propertyId") Long propertyId, @Param("period") Period period);
 
     @Query("SELECT COUNT(b.id) " +
             "FROM BookingEntity b " +
@@ -45,6 +45,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
             "AND b.status.id = 1 " +
             "AND b.property.id = :propertyId " +
             "AND b.id <> :id")
-    int checkOverlapping(@Param("id") Long id, @Param("propertyId") Long propertyId, @Param("period") BookingPeriod period);
+    int checkOverlapping(@Param("id") Long id, @Param("propertyId") Long propertyId, @Param("period") Period period);
 
 }

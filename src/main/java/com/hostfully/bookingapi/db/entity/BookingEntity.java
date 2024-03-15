@@ -25,7 +25,7 @@ public class BookingEntity {
     private PropertyEntity property;
 
     @Embedded
-    private BookingPeriod period;
+    private Period period;
 
     @ManyToOne
     private BookingStatusEntity status;
