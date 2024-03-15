@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingPeriod {
+public class Period {
 
     private LocalDate checkIn;
 

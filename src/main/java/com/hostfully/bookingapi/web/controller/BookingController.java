@@ -95,7 +95,7 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete Booking", description = "Deleting a Booking")
+    @Operation(summary = "Cancel Booking", description = "Canceling a Booking")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully deleted"),
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")
@@ -124,7 +124,7 @@ public class BookingController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Cancel Booking", description = "Canceling a Booking")
+    @Operation(summary = "Delete Booking", description = "Deleting a Booking")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully canceled"),
             @ApiResponse(responseCode = "404", description = "Not found - The Booking was not found")

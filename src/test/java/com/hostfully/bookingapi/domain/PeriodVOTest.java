@@ -1,6 +1,6 @@
 package com.hostfully.bookingapi.domain;
 
-import com.hostfully.bookingapi.db.entity.BookingPeriod;
+import com.hostfully.bookingapi.db.entity.Period;
 import com.hostfully.bookingapi.exceptions.DomainObjectValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +11,12 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class BookingPeriodVOTest {
+class PeriodVOTest {
 
     @Test
     void shouldThrowsExceptionIfCreateDomainObjectWithoutCheckIn() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(null, LocalDate.now());
+            new PeriodVO(null, LocalDate.now());
         });
 
         assertEquals("CheckIn and CheckOut are required.", exception.getMessage());
@@ -25,7 +25,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCreateDomainObjectWithoutCheckOut()  {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(LocalDate.now(), null);
+            new PeriodVO(LocalDate.now(), null);
         });
 
         assertEquals("CheckIn and CheckOut are required.", exception.getMessage());
@@ -34,7 +34,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCreateDomainObjectWithoutRequiredFields() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(null, null);
+            new PeriodVO(null, null);
         });
 
         assertEquals("CheckIn and CheckOut are required.", exception.getMessage());
@@ -43,7 +43,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCheckInIsEqualCheckOut() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(LocalDate.now(), LocalDate.now());
+            new PeriodVO(LocalDate.now(), LocalDate.now());
         });
 
         assertEquals("CheckOut date should be greater than CheckIn date.", exception.getMessage());
@@ -52,7 +52,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCheckInIsAfterCheckOut() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(LocalDate.now().plusDays(1), LocalDate.now());
+            new PeriodVO(LocalDate.now().plusDays(1), LocalDate.now());
         });
 
         assertEquals("CheckOut date should be greater than CheckIn date.", exception.getMessage());
@@ -61,7 +61,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCheckInIsInThePast() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(LocalDate.now().minusDays(1), LocalDate.now());
+            new PeriodVO(LocalDate.now().minusDays(1), LocalDate.now());
         });
 
         assertEquals("CheckIn date should be equals or greater than today.", exception.getMessage());
@@ -70,7 +70,7 @@ class BookingPeriodVOTest {
     @Test
     void shouldThrowsExceptionIfCheckOutIsInThePast() {
         DomainObjectValidationException exception = assertThrows(DomainObjectValidationException.class, () -> {
-            new BookingPeriodVO(LocalDate.now(), LocalDate.now().minusDays(1));
+            new PeriodVO(LocalDate.now(), LocalDate.now().minusDays(1));
         });
 
         assertEquals("CheckOut date should greater than today.", exception.getMessage());
@@ -78,7 +78,7 @@ class BookingPeriodVOTest {
 
     @Test
     void shouldCreateDomainObjectWithRequiredFields() {
-        BookingPeriod.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
+        Period.builder().checkIn(LocalDate.now()).checkOut(LocalDate.now().plusDays(10)).build();
 
         assertDoesNotThrow(() -> DomainObjectValidationException.class);
     }

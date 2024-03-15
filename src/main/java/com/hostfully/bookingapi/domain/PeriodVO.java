@@ -5,13 +5,13 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class BookingPeriodVO implements ValidatedDomain {
+public class PeriodVO implements ValidatedDomain {
 
     private LocalDate checkIn;
 
     private LocalDate checkOut;
 
-    public BookingPeriodVO(LocalDate checkIn, LocalDate checkOut) {
+    public PeriodVO(LocalDate checkIn, LocalDate checkOut) {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         validate();

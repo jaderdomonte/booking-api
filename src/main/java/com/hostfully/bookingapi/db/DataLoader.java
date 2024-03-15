@@ -68,27 +68,27 @@ public class DataLoader implements CommandLineRunner {
 
     private void createBookings() {
         GuestEntity guest = GuestEntity.builder().id(1L).build();
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
+        Period period = Period.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         BookingStatusEntity bookingStatusEntity = new BookingStatusEntity(BookingStatusEnum.CONFIRMED.getId());
         PropertyEntity propertyEntity = PropertyEntity.builder().id(1L).name("Lakefront Escape").build();
 
-        bookingRepository.save(BookingEntity.builder().guest(guest).property(propertyEntity).period(bookingPeriod).status(bookingStatusEntity).build());
+        bookingRepository.save(BookingEntity.builder().guest(guest).property(propertyEntity).period(period).status(bookingStatusEntity).build());
 
         GuestEntity guest2 = GuestEntity.builder().id(2L).build();
-        BookingPeriod bookingPeriod2 = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
+        Period period2 = Period.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         PropertyEntity propertyEntity2 = PropertyEntity.builder().id(2L).name("Beachside Home").build();
 
-        bookingRepository.save(BookingEntity.builder().guest(guest2).property(propertyEntity2).period(bookingPeriod2).status(bookingStatusEntity).build());
+        bookingRepository.save(BookingEntity.builder().guest(guest2).property(propertyEntity2).period(period2).status(bookingStatusEntity).build());
     }
 
     private void createBlockings() {
-        BookingPeriod bookingPeriod = BookingPeriod.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
+        Period period = Period.builder().checkIn(LocalDate.now().plusDays(10)).checkOut(LocalDate.now().plusDays(20)).build();
         PropertyEntity villageCabin = PropertyEntity.builder().id(3L).name("Village Cabin").build();
 
-        blockingRepository.save(BlockingEntity.builder().property(villageCabin).period(bookingPeriod).build());
+        blockingRepository.save(BlockingEntity.builder().property(villageCabin).period(period).build());
 
         PropertyEntity laPremiunSuite = PropertyEntity.builder().id(4L).name("LA Premiun Suite").build();
 
-        blockingRepository.save(BlockingEntity.builder().property(laPremiunSuite).period(bookingPeriod).build());
+        blockingRepository.save(BlockingEntity.builder().property(laPremiunSuite).period(period).build());
     }
 }
